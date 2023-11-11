@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>UGS_Module</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Com.Unity.Services.CloudCode.Apis" Version="0.0.9" />
+      <PackageReference Include="Com.Unity.Services.CloudCode.Core" Version="0.0.1" />
+    </ItemGroup>
+
+</Project>

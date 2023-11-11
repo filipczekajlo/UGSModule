@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UGS Module", "UGS Module\UGS Module.csproj", "{65C258AB-B3CE-4091-B169-42B1432273F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud Save Unit Tests", "Cloud Save Unit Tests\Cloud Save Unit Tests.csproj", "{64C19523-35A4-4B09-8D2E-0EA42EE229C4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65C258AB-B3CE-4091-B169-42B1432273F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C258AB-B3CE-4091-B169-42B1432273F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C258AB-B3CE-4091-B169-42B1432273F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C258AB-B3CE-4091-B169-42B1432273F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64C19523-35A4-4B09-8D2E-0EA42EE229C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C19523-35A4-4B09-8D2E-0EA42EE229C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C19523-35A4-4B09-8D2E-0EA42EE229C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C19523-35A4-4B09-8D2E-0EA42EE229C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3706775-2B69-4559-A22F-4AF6279FA96B}
+	EndGlobalSection
+EndGlobal
