@@ -8,40 +8,59 @@ namespace UGS_Module;
 public class InventorySystem
 {
     [CloudCodeFunction("RequestAgent")]
-    public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient)
+    public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
-        Agent agent = await GetAgent(ctx, apiClient);
+        var agent = await GetAgent(ctx, apiClient, element);
 
         if (agent != null)
         {
+            await SetAgent(ctx, apiClient, element, agent);
         }
         else
         {
-            var airAgentURL = "https://github.com/filipczekajlo/ALOTA-public/blob/main/DefaultAgentAir.txt";
-            var DefaultAirAgent = await DownloadFile(airAgentURL);
-            return DefaultAirAgent;
+            string url = "";
+            switch (element)
+            {
+                case "Air":
+                    url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentAir.txt";
+                    break;
+                case "Earth":
+                    url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentEarth.txt";
+                    break;
+                case "Fire":
+                    url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentFire.txt";
+                    break;
+                case "Water":
+                    url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentWater.txt";
+                    break;
+            }
+            var DefaultAgent = await DownloadFile(url);
+            
+            await SetAgent(ctx, apiClient, element, DefaultAgent);
+            
+            return DefaultAgent;
         }
 
 
-        var agentString = "";
+        // var agentString = "";
 
         // var serializedAgent = JsonSerializer.Serialize(agent);
 
-        return agentString;
+         return "";
     }
 
-    private async Task<Agent?> GetAgent(IExecutionContext ctx, IGameApiClient apiClient)
+    private async Task<string?> GetAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
         var result = await apiClient.CloudSaveData.GetItemsAsync(
             ctx, ctx.AccessToken,
             ctx.ProjectId,
             ctx.PlayerId,
-            new List<string> { "Air Agent" }
+            new List<string> { element }
         );
 
         if (result.Data.Results.Count == 0) return null;
-
-        return JsonSerializer.Deserialize<Agent>(result.Data.Results.First().Value.ToString());
+        return result.Data.Results.First().Value.ToString();
+        // return JsonSerializer.Deserialize<Agent>(result.Data.Results.First().Value.ToString());
     }
 
     private async Task<string> SetAgent(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
