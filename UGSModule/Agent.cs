@@ -2,7 +2,7 @@
 
 public class Agent
 {
-    public Agent()
+    public Agent(bool lol )
     {
         Inventories = new Inventories();
     }

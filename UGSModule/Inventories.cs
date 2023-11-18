@@ -29,6 +29,4 @@ public class Inventories
     private Inventory _equippedAttacks;
     private Inventory _unequippedAttacks;
     
-    [JsonPropertyName("quest-name")] public string? QuestName { get; set; }
-
 }

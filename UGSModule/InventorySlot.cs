@@ -7,6 +7,6 @@ public class InventorySlot
         item = new Item();
         amount = 1;
     }
-    public Item item;
-    public int amount;
+    public Item item { get; set; }
+    public int amount { get; set; }
 }
