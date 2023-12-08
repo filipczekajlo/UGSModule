@@ -1,6 +1,5 @@
-﻿using System.Text.Json.Serialization;
-
-namespace UGS_Module;
+﻿
+namespace InventoryDTO;
 
 public class Inventories
 {

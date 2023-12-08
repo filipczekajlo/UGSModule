@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using InventoryDTO;
 using Unity.Services.CloudCode.Apis;
 using Unity.Services.CloudCode.Core;
 using Unity.Services.CloudSave.Model;
@@ -7,16 +8,45 @@ namespace UGS_Module;
 
 public class InventorySystem
 {
-    [CloudCodeFunction("RequestAgent")]
-    public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    [CloudCodeFunction("TestCall")]
+    public async Task<AgentData> TestCall(IExecutionContext ctx, IGameApiClient apiClient)
     {
-        var agent = await GetAgent(ctx, apiClient, element);
+        return new AgentData();
 
-        if (agent != null)
+    }   
+    
+    [CloudCodeFunction("RequestPlayerCloudData")]
+    public async Task<PlayerCloudData> RequestPlayer(IExecutionContext ctx, IGameApiClient apiClient)
+    {
+        
+        var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
+        if (playerJson != null)
         {
-            return agent;
+            return JsonSerializer.Deserialize<PlayerCloudData>(playerJson);
         }
 
+        PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
+        string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
+
+        await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
+
+        return defaultPlayerCloudData;
+    }
+
+    [CloudCodeFunction("DeleteAgent")]
+    public async Task DeleteAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    {
+        await apiClient.CloudSaveData.DeleteItemAsync(ctx, ctx.AccessToken, element, ctx.ProjectId, ctx.PlayerId);
+        
+    }
+    
+    [CloudCodeFunction("RequestAgentTest")]
+    public async Task<string> RequestAgentTest(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    {
+        string defaultAgent = "";
+        
+        // LEVEL MAY BE MISSING IN DEFAULT AGENTS?
+        
         string url = "";
         switch (element)
         {
@@ -34,27 +64,71 @@ public class InventorySystem
                 break;
         }
         
-        var DefaultAgent = await DownloadFile(url);
+        defaultAgent = await DownloadFile(url);
             
-        await SetAgent(ctx, apiClient, element, DefaultAgent);
-            
-        return DefaultAgent;
+
+        // await SaveToCloudSave(ctx, apiClient, element, agentJson);
+
+        
+        // var deserilaizedAgent = JsonSerializer.Deserialize<AgentData>(defaultAgent);
+        
+        return defaultAgent;
+         // return new AgentData();
     }
 
-    private async Task<string?> GetAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    
+    [CloudCodeFunction("RequestAgent")]
+    public async Task<AgentData> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    {
+        return new AgentData();
+        // string agentJson = "";
+        // var agentJson = await GetFromCloudSave(ctx, apiClient, element);
+        // if (agentJson != null)
+        // {
+        //     return JsonSerializer.Deserialize<AgentData>(agentJson);
+        // }
+
+        // string url = "";
+        // switch (element)
+        // {
+        //     case "Air":
+        //         url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentAir.txt";
+        //         break;
+        //     case "Earth":
+        //         url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentEarth.txt";
+        //         break;
+        //     case "Fire":
+        //         url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentFire.txt";
+        //         break;
+        //     case "Water":
+        //         url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentWater.txt";
+        //         break;
+        // }
+        //
+        // agentJson = await DownloadFile(url);
+        //     
+        //
+        // await SaveToCloudSave(ctx, apiClient, element, agentJson);
+        //
+        // var deserilaizedAgent = JsonSerializer.Deserialize<AgentData>(agentJson);
+        //
+        // return deserilaizedAgent;
+    }
+
+    private async Task<string?> GetFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string keyName)
     {
         var result = await apiClient.CloudSaveData.GetItemsAsync(
             ctx, ctx.AccessToken,
             ctx.ProjectId,
             ctx.PlayerId,
-            new List<string> { element }
+            new List<string> { keyName }
         );
 
         if (result.Data.Results.Count == 0) return null;
         return result.Data.Results.First().Value.ToString();
     }
 
-    private async Task<string> SetAgent(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
+    private async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
     {
         var result = await apiClient.CloudSaveData
             .SetItemAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, new SetItemBody(key, value));
@@ -95,9 +169,9 @@ public class InventorySystem
         return file;
     }
 
-    public Agent CreateDefaultAgent()
+    public AgentData CreateDefaultAgent()
     {
-        var test = new Agent(true);
+        var test = new AgentData();
         var s = JsonSerializer.Serialize(test);
         var path = Path.Combine("DefaultAgents", "DefaultAgentAir.txt");
 
