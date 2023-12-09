@@ -1,13 +1,31 @@
-﻿namespace InventoryDTO;
+﻿using System;
+
+namespace InventoryDTO;
 
 public class PlayerCloudData
 {
     // The key to the current Agent.
-    public string CurrentAgentKey { get; set; }
-    
+
+    private string currentAgentKey;
+    public string CurrentAgentKey
+    {
+        get
+        {
+            return currentAgentKey;;
+        }
+        set
+        {
+            currentAgentKey = value;
+            AgentSelected.Invoke(CurrentAgentKey);
+        }
+    }
+
     public int Level { get; set; }
     
     public int ExperiencePoints { get; set; }
+    
+    public Action<string> AgentSelected = delegate { };
+
 
     public PlayerCloudData()
     {

@@ -31,6 +31,17 @@ public class InventorySystem_Test
         txt.Should().NotBeNullOrEmpty();
         txt.Should().Contain("Air Big Bullet");
     }
+    
+    [Fact]
+    public async Task CreatePlayerCloudDataAndSerialize()
+    {
+        PlayerCloudData data = new PlayerCloudData();
+
+        var serialized = JsonSerializer.Serialize(data);
+        
+
+        serialized.Should().NotBeNull();
+    }
 
     [Fact]
     public async Task GetAgent_Test()

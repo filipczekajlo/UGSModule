@@ -16,21 +16,22 @@ public class InventorySystem
     }   
     
     [CloudCodeFunction("RequestPlayerCloudData")]
-    public async Task<PlayerCloudData> RequestPlayer(IExecutionContext ctx, IGameApiClient apiClient)
+    public async Task<string> RequestPlayer(IExecutionContext ctx, IGameApiClient apiClient)
     {
-        
+        // return JsonSerializer.Serialize(new PlayerCloudData());
         var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
         if (playerJson != null)
         {
-            return JsonSerializer.Deserialize<PlayerCloudData>(playerJson);
+            return playerJson;
         }
 
         PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
-        string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
+         string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
 
         await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
 
-        return defaultPlayerCloudData;
+        return serializedDefaultPlayerCloudData;
+        return "";
     }
 
     [CloudCodeFunction("DeleteAgent")]
@@ -43,6 +44,7 @@ public class InventorySystem
     [CloudCodeFunction("RequestAgentTest")]
     public async Task<string> RequestAgentTest(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
+        // return ("LOLOLOLLOLOL");
         string defaultAgent = "";
         
         // LEVEL MAY BE MISSING IN DEFAULT AGENTS?
