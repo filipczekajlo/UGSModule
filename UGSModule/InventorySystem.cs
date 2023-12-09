@@ -41,14 +41,17 @@ public class InventorySystem
         
     }
     
-    [CloudCodeFunction("RequestAgentTest")]
-    public async Task<string> RequestAgentTest(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    [CloudCodeFunction("RequestAgent")]
+    public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
-        // return ("LOLOLOLLOLOL");
-        string defaultAgent = "";
-        
-        // LEVEL MAY BE MISSING IN DEFAULT AGENTS?
-        
+        // return new AgentData();
+        // string agentJson = "";
+        var agentJson = await GetFromCloudSave(ctx, apiClient, element);
+        if (agentJson != null)
+        {
+            return agentJson;
+        }
+
         string url = "";
         switch (element)
         {
@@ -66,55 +69,14 @@ public class InventorySystem
                 break;
         }
         
-        defaultAgent = await DownloadFile(url);
+        agentJson = await DownloadFile(url);
             
-
-        // await SaveToCloudSave(ctx, apiClient, element, agentJson);
-
         
-        // var deserilaizedAgent = JsonSerializer.Deserialize<AgentData>(defaultAgent);
+        await SaveToCloudSave(ctx, apiClient, element, agentJson);
         
-        return defaultAgent;
-         // return new AgentData();
-    }
-
-    
-    [CloudCodeFunction("RequestAgent")]
-    public async Task<AgentData> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
-    {
-        return new AgentData();
-        // string agentJson = "";
-        // var agentJson = await GetFromCloudSave(ctx, apiClient, element);
-        // if (agentJson != null)
-        // {
-        //     return JsonSerializer.Deserialize<AgentData>(agentJson);
-        // }
-
-        // string url = "";
-        // switch (element)
-        // {
-        //     case "Air":
-        //         url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentAir.txt";
-        //         break;
-        //     case "Earth":
-        //         url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentEarth.txt";
-        //         break;
-        //     case "Fire":
-        //         url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentFire.txt";
-        //         break;
-        //     case "Water":
-        //         url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentWater.txt";
-        //         break;
-        // }
-        //
-        // agentJson = await DownloadFile(url);
-        //     
-        //
-        // await SaveToCloudSave(ctx, apiClient, element, agentJson);
-        //
         // var deserilaizedAgent = JsonSerializer.Deserialize<AgentData>(agentJson);
-        //
-        // return deserilaizedAgent;
+        
+        return agentJson;
     }
 
     private async Task<string?> GetFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string keyName)
