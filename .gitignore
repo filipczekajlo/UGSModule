@@ -5,3 +5,7 @@ riderModule.iml
 /_ReSharper.Caches/
 module-compilation
 UGSModule.ccm
+NetworkUtility
+NetworkUtility.Test
+DTOTest
+UGSModule/Class1.cs

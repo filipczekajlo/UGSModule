@@ -8,13 +8,6 @@ namespace UGS_Module;
 
 public class InventorySystem
 {
-    [CloudCodeFunction("TestCall")]
-    public async Task<AgentData> TestCall(IExecutionContext ctx, IGameApiClient apiClient)
-    {
-        return new AgentData();
-
-    }   
-    
     [CloudCodeFunction("RequestPlayerCloudData")]
     public async Task<string> RequestPlayer(IExecutionContext ctx, IGameApiClient apiClient)
     {
@@ -31,21 +24,17 @@ public class InventorySystem
         await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
 
         return serializedDefaultPlayerCloudData;
-        return "";
     }
 
     [CloudCodeFunction("DeleteAgent")]
     public async Task DeleteAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
         await apiClient.CloudSaveData.DeleteItemAsync(ctx, ctx.AccessToken, element, ctx.ProjectId, ctx.PlayerId);
-        
     }
     
     [CloudCodeFunction("RequestAgent")]
     public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
-        // return new AgentData();
-        // string agentJson = "";
         var agentJson = await GetFromCloudSave(ctx, apiClient, element);
         if (agentJson != null)
         {
@@ -73,8 +62,6 @@ public class InventorySystem
             
         
         await SaveToCloudSave(ctx, apiClient, element, agentJson);
-        
-        // var deserilaizedAgent = JsonSerializer.Deserialize<AgentData>(agentJson);
         
         return agentJson;
     }
@@ -143,4 +130,10 @@ public class InventorySystem
 
         return test;
     }
+    
+    [CloudCodeFunction("TestCall")]
+    public async Task<AgentData> TestCall(IExecutionContext ctx, IGameApiClient apiClient)
+    {
+        return new AgentData();
+    }   
 }

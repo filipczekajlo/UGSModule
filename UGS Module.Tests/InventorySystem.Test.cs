@@ -9,7 +9,7 @@ public class InventorySystem_Test
 {
 
     [Fact]
-    public async Task DownloadFile_Test()
+    public async Task DownloadDeafultAgentFile_Test()
     {
         var txt = await InventorySystem.DownloadFile(
             "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentAir.txt");
@@ -18,7 +18,7 @@ public class InventorySystem_Test
     }
     
     [Fact]
-    public async Task DownloadFileAndDeserialize_Test()
+    public async Task DownloadDefaultAgentFileAndDeserialize_Test()
     {
         var txt = await InventorySystem.DownloadFile(
             "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentAir.txt");
@@ -42,23 +42,7 @@ public class InventorySystem_Test
 
         serialized.Should().NotBeNull();
     }
-
-    [Fact]
-    public async Task GetAgent_Test()
-    {
-        
-    }
     
-    [Fact]
-    public void LoadDefaultAgentfromJson_Test()
-    {
-        var inventorySystem = new InventorySystem();
-        // string test = inventorySystem.LoadDefaultAgentFromJson();
-
-
-        // test.Should().NotBeNull();
-        
-    }
 
     [Fact]
     public void SerializeInventorySlot_Test()
