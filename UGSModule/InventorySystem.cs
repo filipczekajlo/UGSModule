@@ -11,15 +11,29 @@ public class InventorySystem
     [CloudCodeFunction("RequestPlayerCloudData")]
     public async Task<string> RequestPlayer(IExecutionContext ctx, IGameApiClient apiClient)
     {
-        // return JsonSerializer.Serialize(new PlayerCloudData());
         var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
         if (playerJson != null)
         {
             return playerJson;
         }
 
+        // Create new PlayerData if non is found in the cloud. player has probably started game for the first time.
+
+        return ResetPlayer(ctx, apiClient).Result;
+        
         PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
          string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
+
+        await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
+
+        return serializedDefaultPlayerCloudData;
+    }
+
+    [CloudCodeFunction("ResetPlayer")]
+    public async Task<string> ResetPlayer(IExecutionContext ctx, IGameApiClient apiClient)
+    {
+        PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
+        string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
 
         await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
 
@@ -64,6 +78,26 @@ public class InventorySystem
         await SaveToCloudSave(ctx, apiClient, element, agentJson);
         
         return agentJson;
+    }
+
+    [CloudCodeFunction("RequestSetPlayerData")]
+    public async Task<string> RequestSetPlayerData(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    {
+        var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
+        if (playerJson != null)
+        {
+            var deserializedCloudData = JsonSerializer.Deserialize<PlayerCloudData>(playerJson);
+
+            deserializedCloudData.CurrentAgentKey = element;
+            
+            var serializedCloudData = JsonSerializer.Serialize(deserializedCloudData);
+
+            SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedCloudData);
+
+            return serializedCloudData;
+        }
+
+        return null;
     }
 
     private async Task<string?> GetFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string keyName)
