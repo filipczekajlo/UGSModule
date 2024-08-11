@@ -20,13 +20,33 @@ public class InventorySystem
         // Create new PlayerData if non is found in the cloud. player has probably started game for the first time.
 
         return ResetPlayer(ctx, apiClient).Result;
-        
+
         PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
-         string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
+        string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
 
         await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
 
         return serializedDefaultPlayerCloudData;
+    }
+
+    [CloudCodeFunction("RequestItemData")]
+    public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID)
+    {
+        var item = await GetFromCloudSave(ctx, apiClient, itemID);
+        if (item != null)
+        {
+            return item;
+        }
+
+        var itemFactory = new ItemFactory();
+        var newItem = itemFactory.CreateDefaultItem(itemID);
+        if (newItem == "")
+        {
+            return "item not found";
+        }
+
+        await SaveToCloudSave(ctx, apiClient, itemID, newItem);
+        return newItem;
     }
 
     [CloudCodeFunction("ResetPlayer")]
@@ -40,12 +60,13 @@ public class InventorySystem
         return serializedDefaultPlayerCloudData;
     }
 
+
     [CloudCodeFunction("DeleteAgent")]
     public async Task DeleteAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
         await apiClient.CloudSaveData.DeleteItemAsync(ctx, ctx.AccessToken, element, ctx.ProjectId, ctx.PlayerId);
     }
-    
+
     [CloudCodeFunction("RequestAgent")]
     public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
@@ -71,12 +92,12 @@ public class InventorySystem
                 url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentWater.txt";
                 break;
         }
-        
+
         agentJson = await DownloadFile(url);
-            
-        
+
+
         await SaveToCloudSave(ctx, apiClient, element, agentJson);
-        
+
         return agentJson;
     }
 
@@ -89,7 +110,7 @@ public class InventorySystem
             var deserializedCloudData = JsonSerializer.Deserialize<PlayerCloudData>(playerJson);
 
             deserializedCloudData.CurrentAgentKey = element;
-            
+
             var serializedCloudData = JsonSerializer.Serialize(deserializedCloudData);
 
             SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedCloudData);
@@ -113,7 +134,8 @@ public class InventorySystem
         return result.Data.Results.First().Value.ToString();
     }
 
-    private async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
+    private async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key,
+        string value)
     {
         var result = await apiClient.CloudSaveData
             .SetItemAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, new SetItemBody(key, value));
@@ -164,10 +186,10 @@ public class InventorySystem
 
         return test;
     }
-    
+
     [CloudCodeFunction("TestCall")]
     public async Task<AgentData> TestCall(IExecutionContext ctx, IGameApiClient apiClient)
     {
         return new AgentData();
-    }   
+    }
 }

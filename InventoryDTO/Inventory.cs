@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace InventoryDTO;
 
@@ -20,15 +21,15 @@ public class Inventory
         // if can place item 1 in item2slot and other way around
            if (forceSwap)
            {
-               var temp = new InventorySlot(slot2.item, slot2.amount);
-               slot2.UpdateSlot(slot1.item, slot1.amount);
-               slot1.UpdateSlot(temp.item, temp.amount);
+               var temp = new InventorySlot(slot2.ItemData, slot2.amount);
+               slot2.UpdateSlot(slot1.ItemData, slot1.amount);
+               slot1.UpdateSlot(temp.ItemData, temp.amount);
            }
-           else if(slot2.CanPlaceInSlot(slot1.item) && slot1.CanPlaceInSlot(slot2.item))
+           else if(slot2.CanPlaceInSlot(slot1.ItemData) && slot1.CanPlaceInSlot(slot2.ItemData))
            {
-               var temp = new InventorySlot(slot2.item, slot2.amount);
-               slot2.UpdateSlot(slot1.item, slot1.amount);
-               slot1.UpdateSlot(temp.item, temp.amount);
+               var temp = new InventorySlot(slot2.ItemData, slot2.amount);
+               slot2.UpdateSlot(slot1.ItemData, slot1.amount);
+               slot1.UpdateSlot(temp.ItemData, temp.amount);
            }
     }
 

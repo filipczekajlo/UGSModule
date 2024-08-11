@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|c:\\users\\filip\\onedrive\\documents\\ugsmodule\\inventorydto\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|solutionrelative:inventorydto\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|c:\\users\\filip\\onedrive\\documents\\ugsmodule\\inventorydto\\inventoryslot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|solutionrelative:inventorydto\\inventoryslot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|c:\\users\\filip\\onedrive\\documents\\ugsmodule\\inventorydto\\agentdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|solutionrelative:inventorydto\\agentdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65C258AB-B3CE-4091-B169-42B1432273F5}|UGSModule\\UGSModule.csproj|c:\\users\\filip\\onedrive\\documents\\ugsmodule\\ugsmodule\\inventorysystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65C258AB-B3CE-4091-B169-42B1432273F5}|UGSModule\\UGSModule.csproj|solutionrelative:ugsmodule\\inventorysystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41249D1B-4889-4B5B-B9EF-E04E84A45960}|UGS Module.Tests\\UGS Module.Tests.csproj|c:\\users\\filip\\onedrive\\documents\\ugsmodule\\ugs module.tests\\globalusings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41249D1B-4889-4B5B-B9EF-E04E84A45960}|UGS Module.Tests\\UGS Module.Tests.csproj|solutionrelative:ugs module.tests\\globalusings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{41249D1B-4889-4B5B-B9EF-E04E84A45960}|UGS Module.Tests\\UGS Module.Tests.csproj|c:\\users\\filip\\onedrive\\documents\\ugsmodule\\ugs module.tests\\inventorysystem.test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41249D1B-4889-4B5B-B9EF-E04E84A45960}|UGS Module.Tests\\UGS Module.Tests.csproj|solutionrelative:ugs module.tests\\inventorysystem.test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Item.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\InventoryDTO\\Item.cs",
+              "RelativeDocumentMoniker": "InventoryDTO\\Item.cs",
+              "ToolTip": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\InventoryDTO\\Item.cs",
+              "RelativeToolTip": "InventoryDTO\\Item.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T11:07:15.776Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InventorySlot.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\InventoryDTO\\InventorySlot.cs",
+              "RelativeDocumentMoniker": "InventoryDTO\\InventorySlot.cs",
+              "ToolTip": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\InventoryDTO\\InventorySlot.cs",
+              "RelativeToolTip": "InventoryDTO\\InventorySlot.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-11T09:16:57.423Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "InventorySystem.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\UGSModule\\InventorySystem.cs",
+              "RelativeDocumentMoniker": "UGSModule\\InventorySystem.cs",
+              "ToolTip": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\UGSModule\\InventorySystem.cs",
+              "RelativeToolTip": "UGSModule\\InventorySystem.cs",
+              "ViewState": "AQIAAIUAAAAAAAAAAAAAAKoAAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-20T09:54:59.337Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GlobalUsings.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\UGS Module.Tests\\GlobalUsings.cs",
+              "RelativeDocumentMoniker": "UGS Module.Tests\\GlobalUsings.cs",
+              "ToolTip": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\UGS Module.Tests\\GlobalUsings.cs",
+              "RelativeToolTip": "UGS Module.Tests\\GlobalUsings.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-20T09:54:57.891Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AgentData.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\InventoryDTO\\AgentData.cs",
+              "RelativeDocumentMoniker": "InventoryDTO\\AgentData.cs",
+              "ToolTip": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\InventoryDTO\\AgentData.cs",
+              "RelativeToolTip": "InventoryDTO\\AgentData.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-20T09:54:44.363Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "InventorySystem.Test.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\UGS Module.Tests\\InventorySystem.Test.cs",
+              "RelativeDocumentMoniker": "UGS Module.Tests\\InventorySystem.Test.cs",
+              "ToolTip": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\UGS Module.Tests\\InventorySystem.Test.cs",
+              "RelativeToolTip": "UGS Module.Tests\\InventorySystem.Test.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-20T09:54:42.976Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

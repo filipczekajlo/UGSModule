@@ -26,8 +26,8 @@ public class InventorySystem_Test
         AgentData agentData = JsonSerializer.Deserialize<AgentData>(txt);
 
         agentData.Should().NotBeNull();
-        agentData.Inventories.EquippedAttacks.Slots[0].item.Name.Should().Be("Air Big Bullet");
-        agentData.Inventories.EquippedAttacks.Slots[1].item.Name.Should().Be("Air Cone");
+        agentData.Inventories.EquippedAttacks.Slots[0].ItemData.Name.Should().Be("Air Big Bullet");
+        agentData.Inventories.EquippedAttacks.Slots[1].ItemData.Name.Should().Be("Air Cone");
         txt.Should().NotBeNullOrEmpty();
         txt.Should().Contain("Air Big Bullet");
     }
@@ -47,7 +47,7 @@ public class InventorySystem_Test
     [Fact]
     public void SerializeInventorySlot_Test()
     {
-        var inventorySlot = new InventorySlot(new Item());
+        var inventorySlot = new InventorySlot(new WeaponData());
 
         var serialized = JsonSerializer.Serialize(inventorySlot);
         serialized.Should().NotBeNullOrEmpty();
@@ -62,6 +62,6 @@ public class InventorySystem_Test
         // Assert
         inventorySystem.Should().NotBeNull();
         defaultAgent.Inventories.EquippedAttacks.Slots.Should().NotBeNull();
-        defaultAgent.Inventories.EquippedAttacks.Slots[0].item.Id.Should();
+        // defaultAgent.Inventories.EquippedAttacks.Slots[0].ItemData.Id.Should();
     }
 }

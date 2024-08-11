@@ -2,16 +2,20 @@
 
 namespace InventoryDTO;
 
-public class Item
+
+public abstract class ItemData
 {
-    public Item()
+    public ItemData()
     {
-        Id = -1;
+        Id = "";
         TotalDamage = 0;
         ChiCost = 0;
         Name = "";
+        DeleteMe = 0;
     }
-    public int Id { get; set; } 
+    
+    public int DeleteMe { get; set; }
+    public string Id { get; set; } 
     public string Name { get; set; } 
     public int TotalDamage { get; set; }
     public int ChiCost { get; set; }

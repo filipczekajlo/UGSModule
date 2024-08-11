@@ -4,8 +4,11 @@
   &lt;Assembly Path="C:\Users\Filip\.nuget\packages\com.unity.services.cloudcode.apis\0.0.9\lib\netstandard2.1\Unity.Services.CloudCode.Apis.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1fe7812c_002Da8d9_002D4c8d_002Db316_002D060962efac0f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Tests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::9787BEC8-4887-4376-B689-09B18627AA25::net7.0::NetworkUtility.Test.PingTests.NetworkServiceTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::41249D1B-4889-4B5B-B9EF-E04E84A45960::net7.0::UGS_Module.Tests.InventorySystem_Test&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;xUnit::9787BEC8-4887-4376-B689-09B18627AA25::net7.0::NetworkUtility.Test.PingTests.NetworkServiceTests&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::41249D1B-4889-4B5B-B9EF-E04E84A45960::net7.0::UGS_Module.Tests.InventorySystem_Test&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="C:\Users\filip\OneDrive\Documents\UGSModule\UGS Module.Tests" Presentation="&amp;lt;UGS Module.Tests&amp;gt;" /&gt;&#xD;
+  &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
