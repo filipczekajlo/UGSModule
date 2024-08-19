@@ -12,17 +12,20 @@ public class ItemFactoryTest
     {
 
         var itemFactory = new ItemFactory();
-        var sprintWeaponData = itemFactory.CreateDefaultItem("SprintWeapon");
-        var healWeaponData = itemFactory.CreateDefaultItem("HealWeapon");
+        var sprintWeaponData = itemFactory.CreateDefaultItem("Sprint");
+        var healWeaponData = itemFactory.CreateDefaultItem("Heal");
         
-        var castedSprintWeapon = JsonSerializer.Deserialize<SprintWeaponData>(sprintWeaponData);
-        var castedHealWeapon = JsonSerializer.Deserialize<SprintWeaponData>(healWeaponData);
+        var castedSprintWeapon = sprintWeaponData as SprintWeaponData;
+        var castedHealWeapon = healWeaponData as HealWeaponData;
         
+        sprintWeaponData.Should().NotBeNull();
+        sprintWeaponData.Type.Should().Be("SprintWeapon");
         castedSprintWeapon.Should().NotBeNull();
-        castedSprintWeapon.Id.Should().Be("SprintWeapon");
         
+        
+        healWeaponData.Should().NotBeNull();
+        healWeaponData.Type.Should().Be("HealWeapon");
         castedHealWeapon.Should().NotBeNull();
-        castedHealWeapon.Id.Should().Be("HealWeapon");
-    }
 
+}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
 namespace InventoryDTO;
 
@@ -11,10 +11,10 @@ public abstract class ItemData
         TotalDamage = 0;
         ChiCost = 0;
         Name = "";
-        DeleteMe = 0;
+        Type = "";
     }
     
-    public int DeleteMe { get; set; }
+    public string Type { get; set; } // Type discriminator
     public string Id { get; set; } 
     public string Name { get; set; } 
     public int TotalDamage { get; set; }

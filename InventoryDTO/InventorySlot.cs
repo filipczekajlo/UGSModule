@@ -4,7 +4,9 @@ namespace InventoryDTO;
 
 public class InventorySlot
 {
-    public ItemData ItemData { get; set; }
+    // public ItemData ItemData { get; set; }
+    
+    public string ItemDataID { get; set; }
     public int amount { get; set; }
 
     public Action<InventorySlot> OnAfterUpdate = delegate { };
@@ -14,40 +16,38 @@ public class InventorySlot
     {
         
     }
-    public InventorySlot(ItemData itemData, int amount)
+    public InventorySlot(ItemData itemData, int amount = 1)
     {
-        UpdateSlot(itemData, amount);
+        UpdateSlot(itemData.Id, amount);
     }
-
-    public InventorySlot(WeaponData itemData)
+    
+    public InventorySlot(string itemDataID, int amount = 1)
     {
-        ItemData = itemData;
-        amount = 1;
+        UpdateSlot(itemDataID, amount);
     }
 
     public bool IsFilled()
     {
-        if (ItemData.Id != "")
+        if (ItemDataID != "")
             return true;
         return false;
     }
 
-    public void UpdateSlot(ItemData itemData, int _amount)
+    public void UpdateSlot(string itemDataID, int _amount)
     {
         if (OnBeforeUpdate != null)
             OnBeforeUpdate.Invoke(this);
 
-        ItemData = itemData;
+        ItemDataID = itemDataID;
         amount = _amount;
 
         if (OnAfterUpdate != null)
             OnAfterUpdate.Invoke(this);
     }
-
-    // Checks if can place item from mouseDrag in a slot
-    public bool CanPlaceInSlot(ItemData itemData)
+    
+    public bool CanPlaceInSlot(string itemDataID)
     {
-        if (itemData.Id != "")
+        if (itemDataID != "")
         {
             return true;
         }

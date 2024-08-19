@@ -1,5 +1,6 @@
-﻿using System.Text.Json;
-using InventoryDTO;
+﻿using InventoryDTO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Unity.Services.CloudCode.Apis;
 using Unity.Services.CloudCode.Core;
 using Unity.Services.CloudSave.Model;
@@ -20,40 +21,43 @@ public class InventorySystem
         // Create new PlayerData if non is found in the cloud. player has probably started game for the first time.
 
         return ResetPlayer(ctx, apiClient).Result;
-
-        PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
-        string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
-
-        await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
-
-        return serializedDefaultPlayerCloudData;
     }
 
     [CloudCodeFunction("RequestItemData")]
-    public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID)
+    public async Task<ItemData> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID)
     {
+        var settings = new JsonSerializerSettings();
+        settings.Converters.Add(new ItemDataJsonConverter());
+            
         var item = await GetFromCloudSave(ctx, apiClient, itemID);
         if (item != null)
         {
-            return item;
-        }
+            // Configure JsonSerializerOptions to use the custom converter
 
+            // Deserialize using the custom converter
+            return JsonConvert.DeserializeObject<ItemData>(item, settings);
+        }
+        
+        
         var itemFactory = new ItemFactory();
         var newItem = itemFactory.CreateDefaultItem(itemID);
-        if (newItem == "")
+
+        if (newItem != null)
         {
-            return "item not found";
+            var serializedNewItem = JsonConvert.SerializeObject(newItem);
+            await SaveToCloudSave(ctx, apiClient, itemID, serializedNewItem);
         }
 
-        await SaveToCloudSave(ctx, apiClient, itemID, newItem);
         return newItem;
     }
-
+    
+    
+    
     [CloudCodeFunction("ResetPlayer")]
     public async Task<string> ResetPlayer(IExecutionContext ctx, IGameApiClient apiClient)
     {
         PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
-        string serializedDefaultPlayerCloudData = JsonSerializer.Serialize(defaultPlayerCloudData);
+        string serializedDefaultPlayerCloudData = JsonConvert.SerializeObject(defaultPlayerCloudData);
 
         await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
 
@@ -70,35 +74,35 @@ public class InventorySystem
     [CloudCodeFunction("RequestAgent")]
     public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
-        var agentJson = await GetFromCloudSave(ctx, apiClient, element);
-        if (agentJson != null)
-        {
-            return agentJson;
-        }
+        // var agentJson = await GetFromCloudSave(ctx, apiClient, element);
+        // if (agentJson != null)
+        // {
+        //     return agentJson;
+        // }
 
-        string url = "";
-        switch (element)
-        {
-            case "Air":
-                url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentAir.txt";
-                break;
-            case "Earth":
-                url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentEarth.txt";
-                break;
-            case "Fire":
-                url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentFire.txt";
-                break;
-            case "Water":
-                url = "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentWater.txt";
-                break;
-        }
+        ItemFactory itemFactory = new ItemFactory();
+        
+        AgentData agentData = new AgentData();
+        // Create default inventories if non is found in the cloud. player has probably started game for the first time.
+        var inventories = new Inventories();
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("BigBullet")));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Cone")));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Field")));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Ground")));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Heal")));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("SmallBullet")));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("SprintPENIS2")));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Wall")));
+        
+        agentData.Inventories = inventories;
+        
+        var settings = new JsonSerializerSettings();
+        settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        settings.Converters.Add(new ItemDataJsonConverter());
+        var serializedAgentData = JsonConvert.SerializeObject(agentData);
+        await SaveToCloudSave(ctx, apiClient,element , serializedAgentData);
 
-        agentJson = await DownloadFile(url);
-
-
-        await SaveToCloudSave(ctx, apiClient, element, agentJson);
-
-        return agentJson;
+        return serializedAgentData;
     }
 
     [CloudCodeFunction("RequestSetPlayerData")]
@@ -107,11 +111,11 @@ public class InventorySystem
         var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
         if (playerJson != null)
         {
-            var deserializedCloudData = JsonSerializer.Deserialize<PlayerCloudData>(playerJson);
+            var deserializedCloudData = JsonConvert.DeserializeObject<PlayerCloudData>(playerJson);
 
             deserializedCloudData.CurrentAgentKey = element;
 
-            var serializedCloudData = JsonSerializer.Serialize(deserializedCloudData);
+            var serializedCloudData = JsonConvert.SerializeObject(deserializedCloudData);
 
             SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedCloudData);
 
@@ -179,7 +183,7 @@ public class InventorySystem
     public AgentData CreateDefaultAgent()
     {
         var test = new AgentData();
-        var s = JsonSerializer.Serialize(test);
+        var s = JsonConvert.SerializeObject(test);
         var path = Path.Combine("DefaultAgents", "DefaultAgentAir.txt");
 
         File.WriteAllText(path, s);
