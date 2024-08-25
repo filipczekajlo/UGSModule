@@ -79,6 +79,8 @@ public class InventorySystem_Test
         inventories.UnequippedAttacks.Slots.Count.Should().Be(4);
     }
 
+   
+
     [Fact]
     public void DeserializeItemDataTest()
     {
@@ -98,6 +100,11 @@ public class InventorySystem_Test
             // Deserialize using the custom converter
             var result = JsonConvert.DeserializeObject<ItemData>(serialized, settings);
             Console.WriteLine($"Deserialized type: {result?.GetType().FullName ?? "null"}");
+            
+            result.Should().NotBeNull();
+            result.Type.Should().Be("ThrowableWeapon");
+            result.Id.Should().Be("BigBullet");
+            result.Name.Should().Be("Big Bullet");
 
             // Rest of your assertions...
         }
@@ -106,5 +113,21 @@ public class InventorySystem_Test
             Console.WriteLine($"Exception: {ex}");
             throw;
         }
+    }
+
+    [Fact]
+    public void DeserializeTest()
+    {
+        string package = @"{""Type"":""ThrowableWeapon"",""Id"":""BigBullet"",""Name"":""Big Bullet"",""TotalDamage"":20,""ChiCost"":40}";
+        var settings = new JsonSerializerSettings();
+        settings.Converters.Add(new ItemDataJsonConverter());
+        
+        var result = JsonConvert.DeserializeObject<ItemData>(package, settings);
+        
+        result.Should().NotBeNull();
+        result.Type.Should().Be("ThrowableWeapon");
+        result.Id.Should().Be("BigBullet");
+        result.Name.Should().Be("Big Bullet");
+
     }
 }

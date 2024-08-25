@@ -41,6 +41,7 @@ namespace InventoryDTO
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            
             // Serialize the object as its specific type
             var jsonObject = JObject.FromObject(value, serializer);
             jsonObject.WriteTo(writer);

@@ -24,19 +24,19 @@ public class InventorySystem
     }
 
     [CloudCodeFunction("RequestItemData")]
-    public async Task<ItemData> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID)
+    public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID)
     {
         var settings = new JsonSerializerSettings();
         settings.Converters.Add(new ItemDataJsonConverter());
             
-        var item = await GetFromCloudSave(ctx, apiClient, itemID);
-        if (item != null)
-        {
-            // Configure JsonSerializerOptions to use the custom converter
-
-            // Deserialize using the custom converter
-            return JsonConvert.DeserializeObject<ItemData>(item, settings);
-        }
+        // string item = await GetFromCloudSave(ctx, apiClient, itemID);
+        // if (item != null)
+        // {
+        //     return item;
+        //
+        //     // Deserialize using the custom converter
+        //     // return JsonConvert.DeserializeObject<ItemData>(item, settings);
+        // }
         
         
         var itemFactory = new ItemFactory();
@@ -46,9 +46,11 @@ public class InventorySystem
         {
             var serializedNewItem = JsonConvert.SerializeObject(newItem);
             await SaveToCloudSave(ctx, apiClient, itemID, serializedNewItem);
+            return serializedNewItem;
         }
 
-        return newItem;
+        return null;
+        // return newItem;
     }
     
     
