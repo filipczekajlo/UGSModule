@@ -8,7 +8,6 @@ namespace UGS_Module.Tests;
 
 public class InventorySystem_Test
 {
-
     [Fact]
     public async Task DownloadDeafultAgentFile_Test()
     {
@@ -17,7 +16,7 @@ public class InventorySystem_Test
         txt.Should().NotBeNullOrEmpty();
         txt.Should().Contain("Air Big Bullet");
     }
-    
+
     [Fact]
     public async Task DownloadDefaultAgentFileAndDeserialize_Test()
     {
@@ -32,18 +31,18 @@ public class InventorySystem_Test
         txt.Should().NotBeNullOrEmpty();
         txt.Should().Contain("Air Big Bullet");
     }
-    
+
     [Fact]
     public async Task CreatePlayerCloudDataAndSerialize()
     {
         PlayerCloudData data = new PlayerCloudData();
 
         var serialized = JsonConvert.SerializeObject(data);
-        
+
 
         serialized.Should().NotBeNull();
     }
-    
+
 
     [Fact]
     public void SerializeInventorySlot_Test()
@@ -65,7 +64,21 @@ public class InventorySystem_Test
         defaultAgent.Inventories.EquippedAttacks.Slots.Should().NotBeNull();
         // defaultAgent.Inventories.EquippedAttacks.Slots[0].ItemData.Id.Should();
     }
-    
+
+    [Fact]
+    public void CreateDefaultInventoriesTest()
+    {
+        var inventorySystem = new InventorySystem();
+        var inventories = inventorySystem.CreateDefaultInventories();
+
+        // Assert
+        inventorySystem.Should().NotBeNull();
+        inventories.Should().NotBeNull();
+        inventories.EquippedAttacks.Slots.Should().NotBeNull();
+        inventories.EquippedAttacks.Slots.Count.Should().Be(4);
+        inventories.UnequippedAttacks.Slots.Count.Should().Be(4);
+    }
+
     [Fact]
     public void DeserializeItemDataTest()
     {
@@ -81,7 +94,7 @@ public class InventorySystem_Test
         {
             var serialized = JsonConvert.SerializeObject(newItem);
             Console.WriteLine($"Serialized: {serialized}");
-        
+
             // Deserialize using the custom converter
             var result = JsonConvert.DeserializeObject<ItemData>(serialized, settings);
             Console.WriteLine($"Deserialized type: {result?.GetType().FullName ?? "null"}");
@@ -94,5 +107,4 @@ public class InventorySystem_Test
             throw;
         }
     }
-    
 }

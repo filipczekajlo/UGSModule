@@ -80,10 +80,25 @@ public class InventorySystem
         //     return agentJson;
         // }
 
-        ItemFactory itemFactory = new ItemFactory();
         
         AgentData agentData = new AgentData();
+        agentData.Inventories = CreateDefaultInventories();
+        
+        var settings = new JsonSerializerSettings();
+        settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        settings.Converters.Add(new ItemDataJsonConverter());
+        
+        var serializedAgentData = JsonConvert.SerializeObject(agentData);
+        await SaveToCloudSave(ctx, apiClient,element , serializedAgentData);
+
+        return serializedAgentData;
+    }
+    
+    public Inventories CreateDefaultInventories()
+    {
         // Create default inventories if non is found in the cloud. player has probably started game for the first time.
+
+        ItemFactory itemFactory = new ItemFactory();
         var inventories = new Inventories();
         inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("BigBullet")));
         inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Cone")));
@@ -91,18 +106,10 @@ public class InventorySystem
         inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Ground")));
         inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Heal")));
         inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("SmallBullet")));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("SprintPENIS2")));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Sprint")));
         inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Wall")));
         
-        agentData.Inventories = inventories;
-        
-        var settings = new JsonSerializerSettings();
-        settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        settings.Converters.Add(new ItemDataJsonConverter());
-        var serializedAgentData = JsonConvert.SerializeObject(agentData);
-        await SaveToCloudSave(ctx, apiClient,element , serializedAgentData);
-
-        return serializedAgentData;
+        return inventories;
     }
 
     [CloudCodeFunction("RequestSetPlayerData")]

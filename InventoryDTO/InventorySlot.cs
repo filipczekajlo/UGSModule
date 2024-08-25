@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace InventoryDTO;
 
@@ -8,8 +9,10 @@ public class InventorySlot
     
     public string ItemDataID { get; set; }
     public int amount { get; set; }
-
+    
+    [JsonIgnore]
     public Action<InventorySlot> OnAfterUpdate = delegate { };
+    [JsonIgnore]
     public Action<InventorySlot> OnBeforeUpdate = delegate { };
 
     public InventorySlot()
@@ -35,7 +38,7 @@ public class InventorySlot
 
     public void UpdateSlot(string itemDataID, int _amount)
     {
-        if (OnBeforeUpdate != null)
+        if (OnBeforeUpdate != null) 
             OnBeforeUpdate.Invoke(this);
 
         ItemDataID = itemDataID;
