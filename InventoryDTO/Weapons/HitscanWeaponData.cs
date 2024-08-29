@@ -3,12 +3,12 @@ namespace InventoryDTO.Weapons;
 
 public class HitscanWeaponData : WeaponData, ICreateDefaultValues
 {
-    public static ItemData CreateDefaultValues(string id)
+    public ItemData CreateDefaultValues(string itemType, string element)
     {
         HitscanWeaponData hitscanWeaponData = new HitscanWeaponData
         {
-            Type = "HitScanWeapon",
-            Id = id,
+            ItemType = itemType,
+            Id = itemType + element,
             Name = "Hitscan Weapon",
             TotalDamage = 10,
             ChiCost = 10

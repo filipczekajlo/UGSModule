@@ -2,5 +2,5 @@
 
 public interface ICreateDefaultValues
 {
-    static abstract ItemData CreateDefaultValues(string name);
+    // abstract ItemData CreateDefaultValues(string name);
 }

@@ -8,6 +8,9 @@ public class InventorySlot
     // public ItemData ItemData { get; set; }
     
     public string ItemDataID { get; set; }
+    
+    public string ItemType { get; set; }
+    
     public int amount { get; set; }
     
     [JsonIgnore]
@@ -21,12 +24,12 @@ public class InventorySlot
     }
     public InventorySlot(ItemData itemData, int amount = 1)
     {
-        UpdateSlot(itemData.Id, amount);
+        UpdateSlot(itemData.Id, itemData.ItemType, amount);
     }
     
-    public InventorySlot(string itemDataID, int amount = 1)
+    public InventorySlot(string itemDataID, string type, int amount = 1)
     {
-        UpdateSlot(itemDataID, amount);
+        UpdateSlot(itemDataID, type, amount);
     }
 
     public bool IsFilled()
@@ -36,12 +39,13 @@ public class InventorySlot
         return false;
     }
 
-    public void UpdateSlot(string itemDataID, int _amount)
+    public void UpdateSlot(string itemDataID, string type, int _amount)
     {
         if (OnBeforeUpdate != null) 
             OnBeforeUpdate.Invoke(this);
 
         ItemDataID = itemDataID;
+        ItemType = type;
         amount = _amount;
 
         if (OnAfterUpdate != null)

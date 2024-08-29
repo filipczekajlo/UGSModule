@@ -3,12 +3,12 @@ namespace InventoryDTO.Weapons;
 
 public class DamageOverTimeData : WeaponData, ICreateDefaultValues
 {
-    public static ItemData CreateDefaultValues(string id)
+    public ItemData CreateDefaultValues(string itemType, string element)
     {
         DamageOverTimeData damageOverTimeData = new DamageOverTimeData
         {
-            Type = "DamageOverTimeWeapon",
-            Id = id,
+            ItemType = itemType,
+            Id = itemType + element,
             Name = "Damage Over Time Weapon",
             TotalDamage = 5,
             ChiCost = 5

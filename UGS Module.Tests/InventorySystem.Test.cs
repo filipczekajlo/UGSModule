@@ -69,7 +69,7 @@ public class InventorySystem_Test
     public void CreateDefaultInventoriesTest()
     {
         var inventorySystem = new InventorySystem();
-        var inventories = inventorySystem.CreateDefaultInventories();
+        var inventories = inventorySystem.CreateDefaultInventories(StringConsts.AirElement);
 
         // Assert
         inventorySystem.Should().NotBeNull();
@@ -77,6 +77,7 @@ public class InventorySystem_Test
         inventories.EquippedAttacks.Slots.Should().NotBeNull();
         inventories.EquippedAttacks.Slots.Count.Should().Be(4);
         inventories.UnequippedAttacks.Slots.Count.Should().Be(4);
+        inventories.EquippedAttacks.Slots[0].ItemDataID.Should().Be(StringConsts.BigBullet + StringConsts.AirElement);
     }
 
    
@@ -85,34 +86,22 @@ public class InventorySystem_Test
     public void DeserializeItemDataTest()
     {
         var itemFactory = new ItemFactory();
-        var newItem = itemFactory.CreateDefaultItem("BigBullet");
-        Console.WriteLine($"Created item type: {newItem?.GetType().FullName ?? "null"}");
+        var newItem = itemFactory.CreateDefaultItem(StringConsts.BigBullet, StringConsts.AirElement);
 
         var settings = new JsonSerializerSettings();
         settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         settings.Converters.Add(new ItemDataJsonConverter());
-
-        try
-        {
+        
             var serialized = JsonConvert.SerializeObject(newItem);
-            Console.WriteLine($"Serialized: {serialized}");
 
             // Deserialize using the custom converter
             var result = JsonConvert.DeserializeObject<ItemData>(serialized, settings);
-            Console.WriteLine($"Deserialized type: {result?.GetType().FullName ?? "null"}");
             
             result.Should().NotBeNull();
-            result.Type.Should().Be("ThrowableWeapon");
-            result.Id.Should().Be("BigBullet");
+            result.ItemType.Should().Be(StringConsts.BigBullet);
+            result.Id.Should().Be(StringConsts.BigBullet + StringConsts.AirElement);
             result.Name.Should().Be("Big Bullet");
 
-            // Rest of your assertions...
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex}");
-            throw;
-        }
     }
 
     [Fact]
@@ -125,7 +114,7 @@ public class InventorySystem_Test
         var result = JsonConvert.DeserializeObject<ItemData>(package, settings);
         
         result.Should().NotBeNull();
-        result.Type.Should().Be("ThrowableWeapon");
+        result.ItemType.Should().Be("ThrowableWeapon");
         result.Id.Should().Be("BigBullet");
         result.Name.Should().Be("Big Bullet");
 

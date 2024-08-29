@@ -20,15 +20,15 @@ public class Inventory
         // if can place item 1 in item2slot and other way around
            if (forceSwap)
            {
-               var temp = new InventorySlot(slot2.ItemDataID, slot2.amount);
-               slot2.UpdateSlot(slot1.ItemDataID, slot1.amount);
-               slot1.UpdateSlot(temp.ItemDataID, temp.amount);
+               var temp = new InventorySlot(slot2.ItemDataID, slot2.ItemType, slot2.amount);
+               slot2.UpdateSlot(slot1.ItemDataID, slot1.ItemType, slot1.amount);
+               slot1.UpdateSlot(temp.ItemDataID, temp.ItemType, temp.amount);
            }
            else if(slot2.CanPlaceInSlot(slot1.ItemDataID) && slot1.CanPlaceInSlot(slot2.ItemDataID))
            {
-               var temp = new InventorySlot(slot2.ItemDataID, slot2.amount);
-               slot2.UpdateSlot(slot1.ItemDataID, slot1.amount);
-               slot1.UpdateSlot(temp.ItemDataID, temp.amount);
+               var temp = new InventorySlot(slot2.ItemDataID, slot2.ItemType, slot2.amount);
+               slot2.UpdateSlot(slot1.ItemDataID, slot1.ItemType, slot1.amount);
+               slot1.UpdateSlot(temp.ItemDataID, temp.ItemType, temp.amount);
            }
     }
 }

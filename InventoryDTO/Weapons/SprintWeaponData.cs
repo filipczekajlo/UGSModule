@@ -5,12 +5,12 @@ namespace InventoryDTO.Weapons;
 public class SprintWeaponData : WeaponData, ICreateDefaultValues
 {
 
-    public static ItemData CreateDefaultValues(string id)
+    public ItemData CreateDefaultValues(string itemType, string element)
     {
         SprintWeaponData sprintWeaponData = new SprintWeaponData
         {
-            Type = "SprintWeapon",
-            Id = id,
+            ItemType = itemType,
+            Id = itemType + element,
             Name = "Sprint Weapon",
             TotalDamage = 20,
             ChiCost = 50

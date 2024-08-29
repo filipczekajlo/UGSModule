@@ -12,19 +12,19 @@ public class ItemFactoryTest
     {
 
         var itemFactory = new ItemFactory();
-        var sprintWeaponData = itemFactory.CreateDefaultItem("Sprint");
-        var healWeaponData = itemFactory.CreateDefaultItem("Heal");
+        var sprintWeaponData = itemFactory.CreateDefaultItem(StringConsts.Sprint, StringConsts.AirElement);
+        var healWeaponData = itemFactory.CreateDefaultItem(StringConsts.Heal, StringConsts.FireElement);
         
         var castedSprintWeapon = sprintWeaponData as SprintWeaponData;
         var castedHealWeapon = healWeaponData as HealWeaponData;
         
         sprintWeaponData.Should().NotBeNull();
-        sprintWeaponData.Type.Should().Be("SprintWeapon");
+        sprintWeaponData.ItemType.Should().Be("SprintWeapon");
         castedSprintWeapon.Should().NotBeNull();
         
         
         healWeaponData.Should().NotBeNull();
-        healWeaponData.Type.Should().Be("HealWeapon");
+        healWeaponData.ItemType.Should().Be("HealWeapon");
         castedHealWeapon.Should().NotBeNull();
 
 }

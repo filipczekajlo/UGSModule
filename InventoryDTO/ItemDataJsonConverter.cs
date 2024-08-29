@@ -8,15 +8,26 @@ namespace InventoryDTO
 {
     public class ItemDataJsonConverter : JsonConverter
     {
+            // here
         private static readonly Dictionary<string, Type> TypeMapping = new Dictionary<string, Type>
         {
-            {"ConeWeapon", typeof(ConeweaponData)},
-            {"DamageOverTimeWeapon", typeof(DamageOverTimeData)},
-            {"ThrowableWeapon", typeof(ThrowableWeaponData)},
-            {"GroundWeapon", typeof(GroundWeaponData)},
-            {"HealWeapon", typeof(HealWeaponData)},
-            {"HitScanWeapon", typeof(HitscanWeaponData)},
-            {"SprintWeapon", typeof(SprintWeaponData)}
+            {StringConsts.BigBullet, typeof(ThrowableWeaponData)},
+            {StringConsts.Cone, typeof(ConeweaponData)},
+            {StringConsts.Field, typeof(DamageOverTimeData)},
+            {StringConsts.Ground, typeof(GroundWeaponData)},
+            {StringConsts.Heal, typeof(HealWeaponData)},
+            {StringConsts.SmallBullet, typeof(HitscanWeaponData)},
+            {StringConsts.Sprint, typeof(SprintWeaponData)},
+            {StringConsts.Wall, typeof(DamageOverTimeData)},
+            
+            
+            // {"ConeWeapon", typeof(ConeweaponData)},
+            // {"DamageOverTimeWeapon", typeof(DamageOverTimeData)},
+            // {"ThrowableWeapon", typeof(ThrowableWeaponData)},
+            // {"GroundWeapon", typeof(GroundWeaponData)},
+            // {"HealWeapon", typeof(HealWeaponData)},
+            // {"HitScanWeapon", typeof(HitscanWeaponData)},
+            // {"SprintWeapon", typeof(SprintWeaponData)}
         };
 
         public override bool CanConvert(Type objectType)
@@ -27,7 +38,7 @@ namespace InventoryDTO
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var jsonObject = JObject.Load(reader);
-            var type = jsonObject["Type"]?.ToString();
+            var type = jsonObject["ItemType"]?.ToString();
 
             if (type != null && TypeMapping.TryGetValue(type, out var targetType))
             {
@@ -36,7 +47,7 @@ namespace InventoryDTO
                 return result;
             }
 
-            throw new JsonSerializationException($"Type '{type}' is not supported");
+            throw new JsonSerializationException($"Cannot deserialize! Type '{type}' is not supported");
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

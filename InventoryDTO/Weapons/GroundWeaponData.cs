@@ -3,12 +3,12 @@ namespace InventoryDTO.Weapons;
 
 public class GroundWeaponData : WeaponData, ICreateDefaultValues
 {
-    public static ItemData CreateDefaultValues(string id)
+    public ItemData CreateDefaultValues(string itemType, string element)
     {
         GroundWeaponData groundWeaponData = new GroundWeaponData
         {
-            Type = "GroundWeapon",
-            Id = id,
+            ItemType = itemType,
+            Id = itemType + element,
             Name = "Ground Weapon",
             TotalDamage = 10,
             ChiCost = 20

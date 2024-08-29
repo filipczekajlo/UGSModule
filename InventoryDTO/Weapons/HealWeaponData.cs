@@ -3,12 +3,12 @@ namespace InventoryDTO.Weapons;
 
 public class HealWeaponData : WeaponData, ICreateDefaultValues
 {
-    public static ItemData CreateDefaultValues(string id)
+    public ItemData CreateDefaultValues(string itemType, string element)
     {
         HealWeaponData healWeaponData = new HealWeaponData
         {
-            Type = "HealWeapon",
-            Id = id,
+            ItemType = itemType,
+            Id = itemType + element,
             Name = "Heal Weapon",
             TotalDamage = 0,
             ChiCost = 20

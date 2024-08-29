@@ -7,12 +7,12 @@ public class ThrowableWeaponData : WeaponData, ICreateDefaultValues
     {
         
     }
-    public static ItemData CreateDefaultValues(string id)
+    public ItemData CreateDefaultValues(string itemType, string element)
     {
         ThrowableWeaponData throwableWeaponData = new ThrowableWeaponData
         {
-            Type = "ThrowableWeapon",
-            Id = id,
+            ItemType = itemType,
+            Id = itemType + element,
             Name = "Big Bullet",
             TotalDamage = 20,
             ChiCost = 40

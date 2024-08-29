@@ -24,7 +24,7 @@ public class InventorySystem
     }
 
     [CloudCodeFunction("RequestItemData")]
-    public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID)
+    public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID, string element)
     {
         var settings = new JsonSerializerSettings();
         settings.Converters.Add(new ItemDataJsonConverter());
@@ -40,7 +40,7 @@ public class InventorySystem
         
         
         var itemFactory = new ItemFactory();
-        var newItem = itemFactory.CreateDefaultItem(itemID);
+        var newItem = itemFactory.CreateDefaultItem(itemID, element);
 
         if (newItem != null)
         {
@@ -84,7 +84,7 @@ public class InventorySystem
 
         
         AgentData agentData = new AgentData();
-        agentData.Inventories = CreateDefaultInventories();
+        agentData.Inventories = CreateDefaultInventories(element);
         
         var settings = new JsonSerializerSettings();
         settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -96,20 +96,20 @@ public class InventorySystem
         return serializedAgentData;
     }
     
-    public Inventories CreateDefaultInventories()
+    public Inventories CreateDefaultInventories(string element)
     {
         // Create default inventories if non is found in the cloud. player has probably started game for the first time.
 
         ItemFactory itemFactory = new ItemFactory();
         var inventories = new Inventories();
-        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("BigBullet")));
-        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Cone")));
-        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Field")));
-        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Ground")));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Heal")));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("SmallBullet")));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Sprint")));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem("Wall")));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.BigBullet, element)));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Cone, element)));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Field, element)));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Ground, element)));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Heal, element)));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.SmallBullet, element)));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Sprint, element)));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Wall, element)));
         
         return inventories;
     }
