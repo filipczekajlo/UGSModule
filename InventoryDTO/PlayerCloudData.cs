@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace InventoryDTO;
 
@@ -24,6 +25,7 @@ public class PlayerCloudData
     
     public int ExperiencePoints { get; set; }
     
+    [JsonIgnore]
     public Action<string> AgentSelected = delegate { };
 
 

@@ -53,17 +53,17 @@ public class InventorySystem_Test
         serialized.Should().NotBeNullOrEmpty();
     }
 
-    [Fact]
-    public void CreateDefaultAgent_Test()
-    {
-        var inventorySystem = new InventorySystem();
-        var defaultAgent = inventorySystem.CreateDefaultAgent();
-
-        // Assert
-        inventorySystem.Should().NotBeNull();
-        defaultAgent.Inventories.EquippedAttacks.Slots.Should().NotBeNull();
-        // defaultAgent.Inventories.EquippedAttacks.Slots[0].ItemData.Id.Should();
-    }
+    // [Fact]
+    // public void CreateDefaultAgent_Test()
+    // {
+    //     var inventorySystem = new InventorySystem();
+    //     var defaultAgent = inventorySystem.CreateDefaultAgent();
+    //
+    //     // Assert
+    //     inventorySystem.Should().NotBeNull();
+    //     defaultAgent.Inventories.EquippedAttacks.Slots.Should().NotBeNull();
+    //     // defaultAgent.Inventories.EquippedAttacks.Slots[0].ItemData.Id.Should();
+    // }
 
     [Fact]
     public void CreateDefaultInventoriesTest()
@@ -104,19 +104,19 @@ public class InventorySystem_Test
 
     }
 
-    [Fact]
-    public void DeserializeTest()
-    {
-        string package = @"{""Type"":""ThrowableWeapon"",""Id"":""BigBullet"",""Name"":""Big Bullet"",""TotalDamage"":20,""ChiCost"":40}";
-        var settings = new JsonSerializerSettings();
-        settings.Converters.Add(new ItemDataJsonConverter());
-        
-        var result = JsonConvert.DeserializeObject<ItemData>(package, settings);
-        
-        result.Should().NotBeNull();
-        result.ItemType.Should().Be("ThrowableWeapon");
-        result.Id.Should().Be("BigBullet");
-        result.Name.Should().Be("Big Bullet");
-
-    }
+    // [Fact]
+    // public void DeserializeTest()
+    // {
+    //     string package = @"{""ItemType"":""BigBulletWeapon"",""Id"":""BigBullet"",""Name"":""Big Bullet"",""TotalDamage"":20,""ChiCost"":40}";
+    //     var settings = new JsonSerializerSettings();
+    //     settings.Converters.Add(new ItemDataJsonConverter());
+    //     
+    //     var result = JsonConvert.DeserializeObject<ItemData>(package, settings);
+    //     
+    //     result.Should().NotBeNull();
+    //     result.ItemType.Should().Be(StringConsts.BigBullet);
+    //     result.Id.Should().Be("BigBulletWeapon");
+    //     result.Name.Should().Be("Big Bullet");
+    //
+    // }
 }

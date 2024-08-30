@@ -22,7 +22,88 @@ public class InventorySystem
 
         return ResetPlayer(ctx, apiClient).Result;
     }
+    
+    [CloudCodeFunction("RequestSetPlayerData")]
+    public async Task<string> RequestSetPlayerData(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    {
+        var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
+        if (playerJson != null)
+        {
+            var deserializedCloudData = JsonConvert.DeserializeObject<PlayerCloudData>(playerJson);
 
+            deserializedCloudData.CurrentAgentKey = element;
+
+            var serializedCloudData = JsonConvert.SerializeObject(deserializedCloudData);
+
+            SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedCloudData);
+
+            return serializedCloudData;
+        }
+
+        return null;
+    }
+    
+    [CloudCodeFunction("RequestAgent")]
+    public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    {
+        // var agentJson = await GetFromCloudSave(ctx, apiClient, element);
+        // if (agentJson != null)
+        // {
+        //     return agentJson;
+        // }
+
+        
+        AgentData agentData = new AgentData();
+        agentData.Inventories = CreateDefaultInventories(element);
+        
+        var settings = new JsonSerializerSettings();
+        settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        settings.Converters.Add(new ItemDataJsonConverter());
+        
+        var serializedAgentData = JsonConvert.SerializeObject(agentData);
+        await SaveToCloudSave(ctx, apiClient,element , serializedAgentData);
+
+        return serializedAgentData;
+    }
+    
+    [CloudCodeFunction("ResetPlayer")]
+    public async Task<string> ResetPlayer(IExecutionContext ctx, IGameApiClient apiClient)
+    {
+        PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
+        string serializedDefaultPlayerCloudData = JsonConvert.SerializeObject(defaultPlayerCloudData);
+
+        await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
+
+        return serializedDefaultPlayerCloudData;
+    }
+
+
+    [CloudCodeFunction("DeleteAgent")]
+    public async Task DeleteAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    {
+        await apiClient.CloudSaveData.DeleteItemAsync(ctx, ctx.AccessToken, element, ctx.ProjectId, ctx.PlayerId);
+    }
+
+    
+    public Inventories CreateDefaultInventories(string element)
+    {
+        // Create default inventories if non is found in the cloud. player has probably started game for the first time.
+
+        ItemFactory itemFactory = new ItemFactory();
+        var inventories = new Inventories();
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.BigBullet, element)));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Cone, element)));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Field, element)));
+        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Ground, element)));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Heal, element)));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.SmallBullet, element)));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Sprint, element)));
+        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Wall, element)));
+        
+        return inventories;
+    }
+
+  
     [CloudCodeFunction("RequestItemData")]
     public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID, string element)
     {
@@ -51,87 +132,6 @@ public class InventorySystem
 
         return null;
         // return newItem;
-    }
-    
-    
-    
-    [CloudCodeFunction("ResetPlayer")]
-    public async Task<string> ResetPlayer(IExecutionContext ctx, IGameApiClient apiClient)
-    {
-        PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
-        string serializedDefaultPlayerCloudData = JsonConvert.SerializeObject(defaultPlayerCloudData);
-
-        await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
-
-        return serializedDefaultPlayerCloudData;
-    }
-
-
-    [CloudCodeFunction("DeleteAgent")]
-    public async Task DeleteAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
-    {
-        await apiClient.CloudSaveData.DeleteItemAsync(ctx, ctx.AccessToken, element, ctx.ProjectId, ctx.PlayerId);
-    }
-
-    [CloudCodeFunction("RequestAgent")]
-    public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
-    {
-        // var agentJson = await GetFromCloudSave(ctx, apiClient, element);
-        // if (agentJson != null)
-        // {
-        //     return agentJson;
-        // }
-
-        
-        AgentData agentData = new AgentData();
-        agentData.Inventories = CreateDefaultInventories(element);
-        
-        var settings = new JsonSerializerSettings();
-        settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        settings.Converters.Add(new ItemDataJsonConverter());
-        
-        var serializedAgentData = JsonConvert.SerializeObject(agentData);
-        await SaveToCloudSave(ctx, apiClient,element , serializedAgentData);
-
-        return serializedAgentData;
-    }
-    
-    public Inventories CreateDefaultInventories(string element)
-    {
-        // Create default inventories if non is found in the cloud. player has probably started game for the first time.
-
-        ItemFactory itemFactory = new ItemFactory();
-        var inventories = new Inventories();
-        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.BigBullet, element)));
-        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Cone, element)));
-        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Field, element)));
-        inventories.EquippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Ground, element)));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Heal, element)));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.SmallBullet, element)));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Sprint, element)));
-        inventories.UnequippedAttacks.Slots.Add(new InventorySlot(itemFactory.CreateDefaultItem(StringConsts.Wall, element)));
-        
-        return inventories;
-    }
-
-    [CloudCodeFunction("RequestSetPlayerData")]
-    public async Task<string> RequestSetPlayerData(IExecutionContext ctx, IGameApiClient apiClient, string element)
-    {
-        var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
-        if (playerJson != null)
-        {
-            var deserializedCloudData = JsonConvert.DeserializeObject<PlayerCloudData>(playerJson);
-
-            deserializedCloudData.CurrentAgentKey = element;
-
-            var serializedCloudData = JsonConvert.SerializeObject(deserializedCloudData);
-
-            SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedCloudData);
-
-            return serializedCloudData;
-        }
-
-        return null;
     }
 
     private async Task<string?> GetFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string keyName)
@@ -182,23 +182,23 @@ public class InventorySystem
         }
     }
 
-    public string LoadDefaultAgentFromJson()
-    {
-        var path = Path.Combine("DefaultAgents", "DefaultAgentAir.txt");
-        var file = File.ReadAllText(path);
-        return file;
-    }
+    // public string LoadDefaultAgentFromJson()
+    // {
+    //     var path = Path.Combine("DefaultAgents", "DefaultAgentAir.txt");
+    //     var file = File.ReadAllText(path);
+    //     return file;
+    // }
 
-    public AgentData CreateDefaultAgent()
-    {
-        var test = new AgentData();
-        var s = JsonConvert.SerializeObject(test);
-        var path = Path.Combine("DefaultAgents", "DefaultAgentAir.txt");
-
-        File.WriteAllText(path, s);
-
-        return test;
-    }
+    // public AgentData CreateDefaultAgent()
+    // {
+    //     var test = new AgentData();
+    //     var s = JsonConvert.SerializeObject(test);
+    //     var path = Path.Combine("DefaultAgents", "DefaultAgentAir.txt");
+    //
+    //     File.WriteAllText(path, s);
+    //
+    //     return test;
+    // }
 
     [CloudCodeFunction("TestCall")]
     public async Task<AgentData> TestCall(IExecutionContext ctx, IGameApiClient apiClient)
