@@ -1,7 +1,7 @@
 ﻿
 namespace InventoryDTO.Weapons;
 
-public class HitscanWeaponData : WeaponData, ICreateDefaultValues
+public class HitscanWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
 {
     public ItemData CreateDefaultValues(string itemType, string element)
     {
@@ -15,5 +15,10 @@ public class HitscanWeaponData : WeaponData, ICreateDefaultValues
         };
 
         return hitscanWeaponData;
+    }
+
+    public void Upgrade(int level)
+    {
+        throw new System.NotImplementedException();
     }
 }

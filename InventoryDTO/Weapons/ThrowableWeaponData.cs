@@ -1,7 +1,7 @@
 ﻿
 namespace InventoryDTO.Weapons;
 
-public class ThrowableWeaponData : WeaponData, ICreateDefaultValues
+public class ThrowableWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
 {
     public ThrowableWeaponData()
     {
@@ -19,5 +19,10 @@ public class ThrowableWeaponData : WeaponData, ICreateDefaultValues
         };
 
         return throwableWeaponData;
+    }
+
+    public void Upgrade(int level)
+    {
+        throw new System.NotImplementedException();
     }
 }

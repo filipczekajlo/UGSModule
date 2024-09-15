@@ -23,7 +23,7 @@ public class InventorySystem
         return ResetPlayer(ctx, apiClient).Result;
     }
     
-    [CloudCodeFunction("RequestSetPlayerData")]
+    [CloudCodeFunction(nameof(RequestSetPlayerData))]
     public async Task<string> RequestSetPlayerData(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
         var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
@@ -43,14 +43,14 @@ public class InventorySystem
         return null;
     }
     
-    [CloudCodeFunction("RequestAgent")]
+    [CloudCodeFunction(nameof(RequestAgent))]
     public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
-        // var agentJson = await GetFromCloudSave(ctx, apiClient, element);
-        // if (agentJson != null)
-        // {
-        //     return agentJson;
-        // }
+        var agentJson = await GetFromCloudSave(ctx, apiClient, element);
+        if (agentJson != null)
+        {
+            return agentJson;
+        }
 
         
         AgentData agentData = new AgentData();
@@ -66,7 +66,7 @@ public class InventorySystem
         return serializedAgentData;
     }
     
-    [CloudCodeFunction("ResetPlayer")]
+    [CloudCodeFunction(nameof(ResetPlayer))]
     public async Task<string> ResetPlayer(IExecutionContext ctx, IGameApiClient apiClient)
     {
         PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
@@ -78,7 +78,7 @@ public class InventorySystem
     }
 
 
-    [CloudCodeFunction("DeleteAgent")]
+    [CloudCodeFunction(nameof(DeleteAgent))]
     public async Task DeleteAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
         await apiClient.CloudSaveData.DeleteItemAsync(ctx, ctx.AccessToken, element, ctx.ProjectId, ctx.PlayerId);
@@ -104,20 +104,20 @@ public class InventorySystem
     }
 
   
-    [CloudCodeFunction("RequestItemData")]
+    [CloudCodeFunction(nameof(RequestItemData))]
     public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID, string element)
     {
         var settings = new JsonSerializerSettings();
         settings.Converters.Add(new ItemDataJsonConverter());
             
-        // string item = await GetFromCloudSave(ctx, apiClient, itemID);
-        // if (item != null)
-        // {
-        //     return item;
-        //
-        //     // Deserialize using the custom converter
-        //     // return JsonConvert.DeserializeObject<ItemData>(item, settings);
-        // }
+        string item = await GetFromCloudSave(ctx, apiClient, itemID);
+        if (item != null)
+        {
+            return item;
+        
+            // Deserialize using the custom converter
+            // return JsonConvert.DeserializeObject<ItemData>(item, settings);
+        }
         
         
         var itemFactory = new ItemFactory();
@@ -147,8 +147,7 @@ public class InventorySystem
         return result.Data.Results.First().Value.ToString();
     }
 
-    private async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key,
-        string value)
+    private async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
     {
         var result = await apiClient.CloudSaveData
             .SetItemAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, new SetItemBody(key, value));
@@ -182,23 +181,43 @@ public class InventorySystem
         }
     }
 
-    // public string LoadDefaultAgentFromJson()
-    // {
-    //     var path = Path.Combine("DefaultAgents", "DefaultAgentAir.txt");
-    //     var file = File.ReadAllText(path);
-    //     return file;
-    // }
+    [CloudCodeFunction(nameof(RequestRewardPlayer))]
+    public async Task<string> RequestRewardPlayer(IExecutionContext ctx, IGameApiClient apiClient,string element,  int xpPoints)
+    {
+        var agent = RequestAgent(ctx, apiClient, element).Result;
+        if (agent != null)
+        {
+            var deserializedAgent = JsonConvert.DeserializeObject<AgentData>(agent);
+            deserializedAgent.Progress += xpPoints;
+            var serializedAgent = JsonConvert.SerializeObject(deserializedAgent);
+            
+            await SaveToCloudSave(ctx, apiClient, element, serializedAgent);
+            return serializedAgent;
+        }
+        
+        return null;
+    }
 
-    // public AgentData CreateDefaultAgent()
-    // {
-    //     var test = new AgentData();
-    //     var s = JsonConvert.SerializeObject(test);
-    //     var path = Path.Combine("DefaultAgents", "DefaultAgentAir.txt");
-    //
-    //     File.WriteAllText(path, s);
-    //
-    //     return test;
-    // }
+    [CloudCodeFunction(nameof(RequestUpgradeWeapon))]
+    public async Task<string> RequestUpgradeWeapon(IExecutionContext ctx, IGameApiClient apiClient, string itemID, int level)
+    {
+        var item = await GetFromCloudSave(ctx, apiClient, itemID);
+        if (item != null)
+        {
+            var deserializedItem = JsonConvert.DeserializeObject<ItemData>(item);
+            
+            
+            deserializedItem.TotalDamage += level;
+            
+            var serializedItem = JsonConvert.SerializeObject(deserializedItem);
+            await SaveToCloudSave(ctx, apiClient, itemID, serializedItem);
+            return serializedItem;
+        }
+        
+        return null;
+    }
+
+  
 
     [CloudCodeFunction("TestCall")]
     public async Task<AgentData> TestCall(IExecutionContext ctx, IGameApiClient apiClient)

@@ -1,7 +1,7 @@
 ﻿
 namespace InventoryDTO.Weapons;
 
-public class HealWeaponData : WeaponData, ICreateDefaultValues
+public class HealWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
 {
     public ItemData CreateDefaultValues(string itemType, string element)
     {
@@ -15,5 +15,10 @@ public class HealWeaponData : WeaponData, ICreateDefaultValues
         };
 
         return healWeaponData;
+    }
+
+    public void Upgrade(int level)
+    {
+        throw new System.NotImplementedException();
     }
 }

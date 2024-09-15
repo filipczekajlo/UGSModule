@@ -17,6 +17,4 @@ public static class StringConsts
     public const string SmallBullet = "SmallBulletWeapon";
     public const string Sprint = "SprintWeapon";
     public const string Wall = "WallWeapon";
-    
-    
 }

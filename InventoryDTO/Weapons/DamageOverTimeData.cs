@@ -1,7 +1,7 @@
 ﻿
 namespace InventoryDTO.Weapons;
 
-public class DamageOverTimeData : WeaponData, ICreateDefaultValues
+public class DamageOverTimeData : WeaponData, ICreateDefaultValues, IUpgradeable
 {
     public ItemData CreateDefaultValues(string itemType, string element)
     {
@@ -15,5 +15,10 @@ public class DamageOverTimeData : WeaponData, ICreateDefaultValues
         };
 
         return damageOverTimeData;
+    }
+
+    public void Upgrade(int level)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|c:\\users\\filip\\onedrive\\documents\\ugsmodule\\inventorydto\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|solutionrelative:inventorydto\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\InventoryDTO\\Item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:InventoryDTO\\Item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{25A2115E-67D3-4F4F-8481-AE61FF7AB5FE}|InventoryDTO\\InventoryDTO.csproj|c:\\users\\filip\\onedrive\\documents\\ugsmodule\\inventorydto\\inventoryslot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -52,10 +52,8 @@
               "RelativeDocumentMoniker": "InventoryDTO\\Item.cs",
               "ToolTip": "C:\\Users\\filip\\OneDrive\\Documents\\UGSModule\\InventoryDTO\\Item.cs",
               "RelativeToolTip": "InventoryDTO\\Item.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-11T11:07:15.776Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-11T11:07:15.776Z"
             },
             {
               "$type": "Document",

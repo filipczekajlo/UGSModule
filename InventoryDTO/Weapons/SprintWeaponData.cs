@@ -2,7 +2,7 @@
 
 namespace InventoryDTO.Weapons;
 
-public class SprintWeaponData : WeaponData, ICreateDefaultValues
+public class SprintWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
 {
 
     public ItemData CreateDefaultValues(string itemType, string element)
@@ -18,5 +18,10 @@ public class SprintWeaponData : WeaponData, ICreateDefaultValues
 
         return sprintWeaponData;
 
+    }
+
+    public void Upgrade(int level)
+    {
+        throw new System.NotImplementedException();
     }
 }

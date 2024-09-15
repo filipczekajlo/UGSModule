@@ -9,5 +9,6 @@ public class AgentData
     }
     public Inventories Inventories { get; set; }
 
+    public int Progress { get; set; } = 0;
     public int Level { get; set; } = 1;
 }
