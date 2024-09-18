@@ -188,7 +188,11 @@ public class InventorySystem
         if (agent != null)
         {
             var deserializedAgent = JsonConvert.DeserializeObject<AgentData>(agent);
-            deserializedAgent.Progress += xpPoints;
+            
+            LevelingSystem levelingSystem = new LevelingSystem();
+            deserializedAgent.LevelData.TotalXP += xpPoints;
+            levelingSystem.UpdateAgentLevel(deserializedAgent);
+            
             var serializedAgent = JsonConvert.SerializeObject(deserializedAgent);
             
             await SaveToCloudSave(ctx, apiClient, element, serializedAgent);
