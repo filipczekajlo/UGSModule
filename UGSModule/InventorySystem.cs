@@ -1,4 +1,5 @@
-﻿using InventoryDTO;
+﻿using System.Diagnostics;
+using InventoryDTO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Unity.Services.CloudCode.Apis;
@@ -107,8 +108,8 @@ public class InventorySystem
     [CloudCodeFunction(nameof(RequestItemData))]
     public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID, string element)
     {
-        var settings = new JsonSerializerSettings();
-        settings.Converters.Add(new ItemDataJsonConverter());
+        // var settings = new JsonSerializerSettings();
+        // settings.Converters.Add(new ItemDataJsonConverter());
             
         string item = await GetFromCloudSave(ctx, apiClient, itemID);
         if (item != null)
@@ -132,6 +133,57 @@ public class InventorySystem
 
         return null;
         // return newItem;
+    }
+
+
+    [CloudCodeFunction(nameof(RequestCreateNewItemData))]
+    public async Task<string> RequestCreateNewItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemName, string element)
+    {
+        // var allItems = StringConsts.GetAllAttackItems();
+        //
+        // foreach (var item in allItems)
+        // {
+            var itemFactory = new ItemFactory();
+            var newItem = itemFactory.CreateDefaultItem(itemName, element);
+
+            if (newItem != null)
+            {
+                string serializedNewItem = JsonConvert.SerializeObject(newItem);
+                await SaveToCloudSave(ctx, apiClient, itemName + element, serializedNewItem);
+                return serializedNewItem;
+            }
+            else
+            {
+                return null;
+            }
+        // }
+    }
+    
+    [CloudCodeFunction(nameof(RequestAllItemData))]
+    public async Task<List<string>> RequestAllItemData(IExecutionContext ctx, IGameApiClient apiClient)
+    {
+        var allAttackItems = StringConsts.GetAllAttackItems();
+
+        var AllAttackItemIDs = new List<string>();
+        
+        foreach (var item in allAttackItems)
+        {
+            string retrievedItem = await GetFromCloudSave(ctx, apiClient, item.ID);
+
+            if (retrievedItem != null)
+            {
+                AllAttackItemIDs.Add(retrievedItem);
+            }
+
+            else
+            {
+                var newItem = await RequestCreateNewItemData(ctx, apiClient, item.Name, item.Element);
+                AllAttackItemIDs.Add(newItem);
+                
+            }
+        }
+
+        return AllAttackItemIDs;
     }
 
     private async Task<string?> GetFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string keyName)

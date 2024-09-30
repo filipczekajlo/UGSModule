@@ -79,6 +79,40 @@ public class InventorySystem_Test
         inventories.UnequippedAttacks.Slots.Count.Should().Be(4);
         inventories.EquippedAttacks.Slots[0].ItemDataID.Should().Be(StringConsts.BigBullet + StringConsts.AirElement);
     }
+    
+    [Fact]
+    public void RequestAllItemDataTest()
+    {
+        // var allAttackItems = StringConsts.GetAllAttackItems();
+        //
+        // var AllAttackItemIDs = new List<string>();
+        //
+        // foreach (var item in allAttackItems)
+        // {
+        //     var itemID = item.Item1 + item.Item2;
+        //     
+        //     string retrievedItem = await GetFromCloudSave(ctx, apiClient, itemID);
+        //
+        //     if (retrievedItem != null)
+        //     {
+        //         AllAttackItemIDs.Add(retrievedItem);
+        //     }
+        //
+        //     else
+        //     {
+        //         var newItem = await RequestCreateNewItemData(ctx, apiClient, item.Item1, item.Item2);
+        //         AllAttackItemIDs.Add(newItem);
+        //         
+        //     }
+        // }
+        //
+        // return AllAttackItemIDs;
+        
+
+        // allItemData.Should().NotBeNull();
+        // allItemData.Count.Should().Be(8);
+        // allItemData[0].Name.Should().Be("Big Bullet");
+    }
 
    
 
