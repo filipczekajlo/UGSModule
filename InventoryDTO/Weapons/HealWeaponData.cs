@@ -7,8 +7,9 @@ public class HealWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
         HealWeaponData healWeaponData = new HealWeaponData
         {
-            ItemType = itemType,
             Id = itemType + element,
+            ItemType = itemType,
+            Element = element,
             Name = "Heal Weapon",
             TotalDamage = 0,
             ChiCost = 20

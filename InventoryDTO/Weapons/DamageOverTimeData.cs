@@ -7,8 +7,9 @@ public class DamageOverTimeData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
         DamageOverTimeData damageOverTimeData = new DamageOverTimeData
         {
-            ItemType = itemType,
             Id = itemType + element,
+            ItemType = itemType,
+            Element = element,
             Name = "Damage Over Time Weapon",
             TotalDamage = 5,
             ChiCost = 5

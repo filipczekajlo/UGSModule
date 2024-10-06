@@ -7,8 +7,9 @@ public class HitscanWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
         HitscanWeaponData hitscanWeaponData = new HitscanWeaponData
         {
-            ItemType = itemType,
             Id = itemType + element,
+            ItemType = itemType,
+            Element = element,
             Name = "Hitscan Weapon",
             TotalDamage = 10,
             ChiCost = 10

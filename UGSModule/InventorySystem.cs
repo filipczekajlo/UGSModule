@@ -20,8 +20,8 @@ public class InventorySystem
         }
 
         // Create new PlayerData if non is found in the cloud. player has probably started game for the first time.
-
-        return ResetPlayer(ctx, apiClient).Result;
+        ResetRequests resetRequests = new ResetRequests();
+        return resetRequests.ResetPlayer(ctx, apiClient).Result;
     }
     
     [CloudCodeFunction(nameof(RequestSetPlayerData))]
@@ -67,24 +67,6 @@ public class InventorySystem
         return serializedAgentData;
     }
     
-    [CloudCodeFunction(nameof(ResetPlayer))]
-    public async Task<string> ResetPlayer(IExecutionContext ctx, IGameApiClient apiClient)
-    {
-        PlayerCloudData defaultPlayerCloudData = new PlayerCloudData();
-        string serializedDefaultPlayerCloudData = JsonConvert.SerializeObject(defaultPlayerCloudData);
-
-        await SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedDefaultPlayerCloudData);
-
-        return serializedDefaultPlayerCloudData;
-    }
-
-
-    [CloudCodeFunction(nameof(DeleteAgent))]
-    public async Task DeleteAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
-    {
-        await apiClient.CloudSaveData.DeleteItemAsync(ctx, ctx.AccessToken, element, ctx.ProjectId, ctx.PlayerId);
-    }
-
     
     public Inventories CreateDefaultInventories(string element)
     {
@@ -105,59 +87,38 @@ public class InventorySystem
     }
 
   
-    [CloudCodeFunction(nameof(RequestItemData))]
-    public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID, string element)
-    {
-        // var settings = new JsonSerializerSettings();
-        // settings.Converters.Add(new ItemDataJsonConverter());
-            
-        string item = await GetFromCloudSave(ctx, apiClient, itemID);
-        if (item != null)
-        {
-            return item;
-        
-            // Deserialize using the custom converter
-            // return JsonConvert.DeserializeObject<ItemData>(item, settings);
-        }
-        
-        
-        var itemFactory = new ItemFactory();
-        var newItem = itemFactory.CreateDefaultItem(itemID, element);
+    // [CloudCodeFunction(nameof(RequestItemData))]
+    // public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID, string element)
+    // {
+    //     // var settings = new JsonSerializerSettings();
+    //     // settings.Converters.Add(new ItemDataJsonConverter());
+    //         
+    //     string item = await GetFromCloudSave(ctx, apiClient, itemID);
+    //     if (item != null)
+    //     {
+    //         return item;
+    //     
+    //         // Deserialize using the custom converter
+    //         // return JsonConvert.DeserializeObject<ItemData>(item, settings);
+    //     }
+    //     
+    //     
+    //     var itemFactory = new ItemFactory();
+    //     var newItem = itemFactory.CreateDefaultItem(itemID, element);
+    //
+    //     if (newItem != null)
+    //     {
+    //         var serializedNewItem = JsonConvert.SerializeObject(newItem);
+    //         await SaveToCloudSave(ctx, apiClient, itemID, serializedNewItem);
+    //         return serializedNewItem;
+    //     }
+    //
+    //     return null;
+    //     // return newItem;
+    // }
 
-        if (newItem != null)
-        {
-            var serializedNewItem = JsonConvert.SerializeObject(newItem);
-            await SaveToCloudSave(ctx, apiClient, itemID, serializedNewItem);
-            return serializedNewItem;
-        }
 
-        return null;
-        // return newItem;
-    }
-
-
-    [CloudCodeFunction(nameof(RequestCreateNewItemData))]
-    public async Task<string> RequestCreateNewItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemName, string element)
-    {
-        // var allItems = StringConsts.GetAllAttackItems();
-        //
-        // foreach (var item in allItems)
-        // {
-            var itemFactory = new ItemFactory();
-            var newItem = itemFactory.CreateDefaultItem(itemName, element);
-
-            if (newItem != null)
-            {
-                string serializedNewItem = JsonConvert.SerializeObject(newItem);
-                await SaveToCloudSave(ctx, apiClient, itemName + element, serializedNewItem);
-                return serializedNewItem;
-            }
-            else
-            {
-                return null;
-            }
-        // }
-    }
+    
     
     [CloudCodeFunction(nameof(RequestAllItemData))]
     public async Task<List<string>> RequestAllItemData(IExecutionContext ctx, IGameApiClient apiClient)
@@ -169,12 +130,12 @@ public class InventorySystem
         foreach (var item in allAttackItems)
         {
             string retrievedItem = await GetFromCloudSave(ctx, apiClient, item.ID);
-
+        
             if (retrievedItem != null)
             {
                 AllAttackItemIDs.Add(retrievedItem);
             }
-
+            
             else
             {
                 var newItem = await RequestCreateNewItemData(ctx, apiClient, item.Name, item.Element);
@@ -184,6 +145,24 @@ public class InventorySystem
         }
 
         return AllAttackItemIDs;
+    }
+    
+    [CloudCodeFunction(nameof(RequestCreateNewItemData))]
+    public async Task<string> RequestCreateNewItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemName, string element)
+    {
+        var itemFactory = new ItemFactory();
+        var newItem = itemFactory.CreateDefaultItem(itemName, element);
+
+        if (newItem != null)
+        {
+            string serializedNewItem = JsonConvert.SerializeObject(newItem);
+            await SaveToCloudSave(ctx, apiClient, itemName + element, serializedNewItem);
+            return serializedNewItem;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private async Task<string?> GetFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string keyName)
@@ -199,39 +178,14 @@ public class InventorySystem
         return result.Data.Results.First().Value.ToString();
     }
 
-    private async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
+    public async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
     {
         var result = await apiClient.CloudSaveData
             .SetItemAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, new SetItemBody(key, value));
 
         return result.Data.ToString();
     }
-
-    public static async Task<string> DownloadFile(string fileUrl)
-    {
-        using (HttpClient client = new HttpClient())
-        {
-            try
-            {
-                // Send a GET request to the URL
-                HttpResponseMessage response = await client.GetAsync(fileUrl);
-
-                // Ensure we received a successful response
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception($"Error: {response.StatusCode}");
-                }
-
-                // Read and return the content of the response
-                return await response.Content.ReadAsStringAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return null;
-            }
-        }
-    }
+    
 
     [CloudCodeFunction(nameof(RequestRewardPlayer))]
     public async Task<string> RequestRewardPlayer(IExecutionContext ctx, IGameApiClient apiClient,string element,  int xpPoints)

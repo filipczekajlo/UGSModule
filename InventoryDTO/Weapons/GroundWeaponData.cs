@@ -7,8 +7,9 @@ public class GroundWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
         GroundWeaponData groundWeaponData = new GroundWeaponData
         {
-            ItemType = itemType,
             Id = itemType + element,
+            ItemType = itemType,
+            Element = element,
             Name = "Ground Weapon",
             TotalDamage = 10,
             ChiCost = 20

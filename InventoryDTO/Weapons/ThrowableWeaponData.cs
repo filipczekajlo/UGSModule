@@ -11,8 +11,9 @@ public class ThrowableWeaponData : WeaponData, ICreateDefaultValues, IUpgradeabl
     {
         ThrowableWeaponData throwableWeaponData = new ThrowableWeaponData
         {
-            ItemType = itemType,
             Id = itemType + element,
+            ItemType = itemType,
+            Element = element,
             Name = "Big Bullet",
             TotalDamage = 20,
             ChiCost = 40

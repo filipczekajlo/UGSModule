@@ -7,8 +7,9 @@ public class ConeweaponData : WeaponData, ICreateDefaultValues
     {
         ConeweaponData coneweaponData = new ConeweaponData
         {
-            ItemType = itemType,
             Id = itemType + element,
+            ItemType = itemType,
+            Element = element,
             Name = "Cone Weapon",
             TotalDamage = 15,
             ChiCost = 30

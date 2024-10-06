@@ -9,8 +9,9 @@ public class SprintWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
         SprintWeaponData sprintWeaponData = new SprintWeaponData
         {
-            ItemType = itemType,
             Id = itemType + element,
+            ItemType = itemType,
+            Element = element,
             Name = "Sprint Weapon",
             TotalDamage = 20,
             ChiCost = 50

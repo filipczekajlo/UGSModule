@@ -8,30 +8,7 @@ namespace UGS_Module.Tests;
 
 public class InventorySystem_Test
 {
-    [Fact]
-    public async Task DownloadDeafultAgentFile_Test()
-    {
-        var txt = await InventorySystem.DownloadFile(
-            "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentAir.txt");
-        txt.Should().NotBeNullOrEmpty();
-        txt.Should().Contain("Air Big Bullet");
-    }
-
-    [Fact]
-    public async Task DownloadDefaultAgentFileAndDeserialize_Test()
-    {
-        var txt = await InventorySystem.DownloadFile(
-            "https://raw.githubusercontent.com/filipczekajlo/ALOTA-public/main/DefaultAgentAir.txt");
-
-        AgentData agentData = JsonConvert.DeserializeObject<AgentData>(txt);
-
-        agentData.Should().NotBeNull();
-        // agentData.Inventories.EquippedAttacks.Slots[0].ItemData.Name.Should().Be("Air Big Bullet");
-        // agentData.Inventories.EquippedAttacks.Slots[1].ItemData.Name.Should().Be("Air Cone");
-        txt.Should().NotBeNullOrEmpty();
-        txt.Should().Contain("Air Big Bullet");
-    }
-
+   
     [Fact]
     public async Task CreatePlayerCloudDataAndSerialize()
     {
@@ -52,19 +29,7 @@ public class InventorySystem_Test
         var serialized = JsonConvert.SerializeObject(inventorySlot);
         serialized.Should().NotBeNullOrEmpty();
     }
-
-    // [Fact]
-    // public void CreateDefaultAgent_Test()
-    // {
-    //     var inventorySystem = new InventorySystem();
-    //     var defaultAgent = inventorySystem.CreateDefaultAgent();
-    //
-    //     // Assert
-    //     inventorySystem.Should().NotBeNull();
-    //     defaultAgent.Inventories.EquippedAttacks.Slots.Should().NotBeNull();
-    //     // defaultAgent.Inventories.EquippedAttacks.Slots[0].ItemData.Id.Should();
-    // }
-
+    
     [Fact]
     public void CreateDefaultInventoriesTest()
     {
@@ -137,20 +102,4 @@ public class InventorySystem_Test
             result.Name.Should().Be("Big Bullet");
 
     }
-
-    // [Fact]
-    // public void DeserializeTest()
-    // {
-    //     string package = @"{""ItemType"":""BigBulletWeapon"",""Id"":""BigBullet"",""Name"":""Big Bullet"",""TotalDamage"":20,""ChiCost"":40}";
-    //     var settings = new JsonSerializerSettings();
-    //     settings.Converters.Add(new ItemDataJsonConverter());
-    //     
-    //     var result = JsonConvert.DeserializeObject<ItemData>(package, settings);
-    //     
-    //     result.Should().NotBeNull();
-    //     result.ItemType.Should().Be(StringConsts.BigBullet);
-    //     result.Id.Should().Be("BigBulletWeapon");
-    //     result.Name.Should().Be("Big Bullet");
-    //
-    // }
 }
