@@ -10,7 +10,7 @@ public class AgentData
     }
     public Inventories Inventories { get; set; }
     
-    public LevelData LevelData { get; }
+    public LevelData LevelData { get; set; }
 
     // public int Level { get; set; } = 1;
     // public double TotalXP { get; set; } = 0;

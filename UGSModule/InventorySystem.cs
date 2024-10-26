@@ -196,16 +196,16 @@ public class InventorySystem
             var deserializedAgent = JsonConvert.DeserializeObject<AgentData>(agent);
             
             LevelingSystem levelingSystem = new LevelingSystem();
-            deserializedAgent.LevelData.TotalXP += xpPoints;
-            levelingSystem.UpdateAgentLevel(deserializedAgent);
+            
+            var result = levelingSystem.GrantExperience(deserializedAgent.LevelData, xpPoints);
             
             var serializedAgent = JsonConvert.SerializeObject(deserializedAgent);
             
             await SaveToCloudSave(ctx, apiClient, element, serializedAgent);
-            return serializedAgent;
+            return $"Agent {element} has been rewarded with {xpPoints} XP points. New XP: {result.TotalXP}. Current Level: {result.CurrentLevel}";
         }
         
-        return null;
+        return $"Could not add xp to agent with agentKey '{element}' Agent not found";
     }
 
     [CloudCodeFunction(nameof(RequestUpgradeWeapon))]

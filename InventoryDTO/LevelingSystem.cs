@@ -4,14 +4,28 @@ namespace InventoryDTO;
 
 public class LevelingSystem
 {
-    private const double BaseXP = 0; // Adjust as needed
-    private const double GrowthRate = 1.2; // Adjust as needed
-    private const int MaxLevel = 100; // Set a level cap if desired
-
+    public struct GrantExperienceResult
+    {
+        public double XPToGain;
+        public double TotalXP;
+        public int CurrentLevel;
+        
+        public GrantExperienceResult(double xpToGain, double totalXP, int currentLevel)
+        {
+            XPToGain = xpToGain;
+            TotalXP = totalXP;
+            CurrentLevel = currentLevel;
+        }
+    }
+    public double XPForFirstLevel { get; } = 100; // Adjust as needed
+    public double Exponent { get; } = 1f; // Adjust as needed
+    public int MaxLevel { get; } = 100; // Set a level cap if desired
+    
     public double GetTotalXPForLevel(int level)
     {
-        if (level <= 1) return 0;
-        return BaseXP * (Math.Pow(GrowthRate, level - 1) - 1) / (GrowthRate - 1);
+        if (level <= 0) return 0;
+
+        return XPForFirstLevel * Math.Pow(level, Exponent);    
     }
 
     public double GetXPForNextLevel(int currentLevel)
@@ -19,41 +33,61 @@ public class LevelingSystem
         return GetTotalXPForLevel(currentLevel + 1) - GetTotalXPForLevel(currentLevel);
     }
 
-    public void UpdateAgentLevel(AgentData agentData)
+    public int Updatelevel(LevelData LevelData)
     {
-        int newLevel = CalculateLevelFromTotalXP(agentData.LevelData.TotalXP);
+        int newLevel = CalculateLevelFromTotalXP(LevelData.TotalXP);
         if (newLevel > MaxLevel)
         {
             newLevel = MaxLevel;
-            agentData.LevelData.TotalXP = GetTotalXPForLevel(MaxLevel);
+            LevelData.TotalXP = GetTotalXPForLevel(MaxLevel);
         }
 
-        if (newLevel > agentData.LevelData.Level)
+        if (newLevel > LevelData.Level)
         {
-            agentData.LevelData.Level = newLevel;
-            Console.WriteLine($"Congratulations! You've reached Level {agentData.LevelData.Level}.");
+            LevelData.Level = newLevel;
+            Console.WriteLine($"Congratulations! You've reached Level {LevelData.Level}.");
         }
 
-        double totalXPForCurrentLevel = GetTotalXPForLevel(agentData.LevelData.Level);
-        double totalXPForNextLevel = GetTotalXPForLevel(agentData.LevelData.Level + 1);
+        double totalXPForCurrentLevel = GetTotalXPForLevel(LevelData.Level);
+        double totalXPForNextLevel = GetTotalXPForLevel(LevelData.Level + 1);
 
         // Ensure CurrentLevelXP is not negative
-        agentData.LevelData.CurrentLevelXP = Math.Max(0, agentData.LevelData.TotalXP - totalXPForCurrentLevel);
+        LevelData.CurrentLevelXP = Math.Max(0, LevelData.TotalXP - totalXPForCurrentLevel);
 
         // Calculate XPToNextLevel to reflect the remaining XP needed to level up
-        agentData.LevelData.XPToNextLevel = totalXPForNextLevel - agentData.LevelData.TotalXP;
+        LevelData.XPToNextLevel = totalXPForNextLevel - LevelData.TotalXP;
+        
+        return LevelData.Level;
     }
 
-    private int CalculateLevelFromTotalXP(double totalXP)
+    public int CalculateLevelFromTotalXP(double totalXP)
     {
-        double level = 1 + Math.Log((totalXP * (GrowthRate - 1) / BaseXP) + 1, GrowthRate);
+        // Ensure totalXP is not negative
+        if (totalXP < 0)
+        {
+            return 0; // Minimum level if XP is negative
+        }
+
+        // Calculate the level based on totalXP without any additional offset
+        double level = Math.Pow(totalXP / XPForFirstLevel, 1 / Exponent);
+    
+        // Cap the level at MaxLevel
+        if (level >= MaxLevel)
+        {
+            return MaxLevel;
+        }
+
         return (int)Math.Floor(level);
     }
 
     // ToDo: Separate events handling from leveling system
-    public void GrantExperience(AgentData agentData, double xpGained)
+    public GrantExperienceResult GrantExperience(LevelData LevelData, double xpToGain)
     {
-        agentData.LevelData.TotalXP += xpGained;
-        UpdateAgentLevel(agentData);
+        // Add XP, but do not exceed the XP required for the maximum level
+        LevelData.TotalXP = Math.Min(LevelData.TotalXP + xpToGain, GetTotalXPForLevel(MaxLevel));
+    
+        var currentLevel = Updatelevel(LevelData);
+        
+        return new GrantExperienceResult(xpToGain, LevelData.TotalXP, currentLevel);
     }
 }
