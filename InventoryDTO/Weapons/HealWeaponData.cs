@@ -1,25 +1,25 @@
-﻿
-namespace InventoryDTO.Weapons;
-
-public class HealWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
+﻿namespace InventoryDTO.Weapons
 {
-    public ItemData CreateDefaultValues(string itemType, string element)
+    public class HealWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
-        HealWeaponData healWeaponData = new HealWeaponData
+        public ItemData CreateDefaultValues(string itemType, string element)
         {
-            Id = itemType + element,
-            ItemType = itemType,
-            Element = element,
-            Name = "Heal Weapon",
-            TotalDamage = 0,
-            ChiCost = 20
-        };
+            HealWeaponData healWeaponData = new HealWeaponData
+            {
+                Id = itemType + element,
+                ItemType = itemType,
+                Element = element,
+                Name = "Heal Weapon",
+                TotalDamage = 0,
+                ChiCost = 20
+            };
 
-        return healWeaponData;
-    }
+            return healWeaponData;
+        }
 
-    public void Upgrade(int level)
-    {
-        throw new System.NotImplementedException();
+        public void Upgrade(int level)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

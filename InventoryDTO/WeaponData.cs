@@ -1,6 +1,6 @@
-﻿namespace InventoryDTO;
-
-public class WeaponData : ItemData
+﻿namespace InventoryDTO
 {
-    
+    public class WeaponData : ItemData
+    {
+    }
 }

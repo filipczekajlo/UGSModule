@@ -1,6 +1,7 @@
-﻿namespace InventoryDTO;
-
-public interface IUpgradeable
+﻿namespace InventoryDTO
 {
-    public void Upgrade(int level);
+    public interface IUpgradeable
+    {
+        public void Upgrade(int level);
+    }
 }

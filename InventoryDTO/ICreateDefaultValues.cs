@@ -1,6 +1,7 @@
-﻿namespace InventoryDTO;
-
-public interface ICreateDefaultValues
+﻿namespace InventoryDTO
 {
-    // abstract ItemData CreateDefaultValues(string name);
+    public interface ICreateDefaultValues
+    {
+        // abstract ItemData CreateDefaultValues(string name);
+    }
 }

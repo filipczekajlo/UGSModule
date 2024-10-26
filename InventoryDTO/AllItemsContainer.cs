@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace InventoryDTO;
-
-public class AllItemsContainer
+namespace InventoryDTO
 {
-    public List<ItemData> Items { get; set; }
+    public class AllItemsContainer
+    {
+        public List<ItemData> Items { get; set; }
+    }
 }

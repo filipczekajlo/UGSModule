@@ -1,25 +1,25 @@
-﻿
-namespace InventoryDTO.Weapons;
-
-public class HitscanWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
+﻿namespace InventoryDTO.Weapons
 {
-    public ItemData CreateDefaultValues(string itemType, string element)
+    public class HitscanWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
-        HitscanWeaponData hitscanWeaponData = new HitscanWeaponData
+        public ItemData CreateDefaultValues(string itemType, string element)
         {
-            Id = itemType + element,
-            ItemType = itemType,
-            Element = element,
-            Name = "Hitscan Weapon",
-            TotalDamage = 10,
-            ChiCost = 10
-        };
+            HitscanWeaponData hitscanWeaponData = new HitscanWeaponData
+            {
+                Id = itemType + element,
+                ItemType = itemType,
+                Element = element,
+                Name = "Hitscan Weapon",
+                TotalDamage = 10,
+                ChiCost = 10
+            };
 
-        return hitscanWeaponData;
-    }
+            return hitscanWeaponData;
+        }
 
-    public void Upgrade(int level)
-    {
-        throw new System.NotImplementedException();
+        public void Upgrade(int level)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,17 +1,20 @@
-﻿namespace InventoryDTO;
-
-public class ItemDataHolder
+﻿namespace InventoryDTO
 {
-    public string Name { get; set; }
-    public string Element { get; set; }
-    public string ID { get; set; }
-    
-    public ItemDataHolder(){}
-    
-    public ItemDataHolder(string name, string element)
+    public class ItemDataHolder
     {
-        Name = name;
-        Element = element;
-        ID = name + element;
+        public string Name { get; set; }
+        public string Element { get; set; }
+        public string ID { get; set; }
+
+        public ItemDataHolder()
+        {
+        }
+
+        public ItemDataHolder(string name, string element)
+        {
+            Name = name;
+            Element = element;
+            ID = name + element;
+        }
     }
 }

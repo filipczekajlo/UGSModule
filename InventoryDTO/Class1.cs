@@ -1,5 +1,6 @@
-﻿namespace InventoryDTO;
-
-public class Class1
+﻿namespace InventoryDTO
 {
+    public class Class1
+    {
+    }
 }

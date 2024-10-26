@@ -1,25 +1,25 @@
-﻿
-namespace InventoryDTO.Weapons;
-
-public class DamageOverTimeData : WeaponData, ICreateDefaultValues, IUpgradeable
+﻿namespace InventoryDTO.Weapons
 {
-    public ItemData CreateDefaultValues(string itemType, string element)
+    public class DamageOverTimeData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
-        DamageOverTimeData damageOverTimeData = new DamageOverTimeData
+        public ItemData CreateDefaultValues(string itemType, string element)
         {
-            Id = itemType + element,
-            ItemType = itemType,
-            Element = element,
-            Name = "Damage Over Time Weapon",
-            TotalDamage = 5,
-            ChiCost = 5
-        };
+            DamageOverTimeData damageOverTimeData = new DamageOverTimeData
+            {
+                Id = itemType + element,
+                ItemType = itemType,
+                Element = element,
+                Name = "Damage Over Time Weapon",
+                TotalDamage = 5,
+                ChiCost = 5
+            };
 
-        return damageOverTimeData;
-    }
+            return damageOverTimeData;
+        }
 
-    public void Upgrade(int level)
-    {
-        throw new System.NotImplementedException();
+        public void Upgrade(int level)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

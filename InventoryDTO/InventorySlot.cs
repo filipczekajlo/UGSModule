@@ -1,64 +1,63 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace InventoryDTO;
-
-public class InventorySlot
+namespace InventoryDTO
 {
-    // public ItemData ItemData { get; set; }
-    
-    public string ItemDataID { get; set; }
-    
-    public string ItemType { get; set; }
-    
-    public int amount { get; set; }
-    
-    [JsonIgnore]
-    public Action<InventorySlot> OnAfterUpdate = delegate { };
-    [JsonIgnore]
-    public Action<InventorySlot> OnBeforeUpdate = delegate { };
+    public class InventorySlot
+    {
+        // public ItemData ItemData { get; set; }
 
-    public InventorySlot()
-    {
-        
-    }
-    public InventorySlot(ItemData itemData, int amount = 1)
-    {
-        UpdateSlot(itemData.Id, itemData.ItemType, amount);
-    }
-    
-    public InventorySlot(string itemDataID, string type, int amount = 1)
-    {
-        UpdateSlot(itemDataID, type, amount);
-    }
+        public string ItemDataID { get; set; }
 
-    public bool IsFilled()
-    {
-        if (ItemDataID != "")
-            return true;
-        return false;
-    }
+        public string ItemType { get; set; }
 
-    public void UpdateSlot(string itemDataID, string type, int _amount)
-    {
-        if (OnBeforeUpdate != null) 
-            OnBeforeUpdate.Invoke(this);
+        public int amount { get; set; }
 
-        ItemDataID = itemDataID;
-        ItemType = type;
-        amount = _amount;
+        [JsonIgnore] public Action<InventorySlot> OnAfterUpdate = delegate { };
+        [JsonIgnore] public Action<InventorySlot> OnBeforeUpdate = delegate { };
 
-        if (OnAfterUpdate != null)
-            OnAfterUpdate.Invoke(this);
-    }
-    
-    public bool CanPlaceInSlot(string itemDataID)
-    {
-        if (itemDataID != "")
+        public InventorySlot()
         {
-            return true;
         }
 
-        return false;
+        public InventorySlot(ItemData itemData, int amount = 1)
+        {
+            UpdateSlot(itemData.Id, itemData.ItemType, amount);
+        }
+
+        public InventorySlot(string itemDataID, string type, int amount = 1)
+        {
+            UpdateSlot(itemDataID, type, amount);
+        }
+
+        public bool IsFilled()
+        {
+            if (ItemDataID != "")
+                return true;
+            return false;
+        }
+
+        public void UpdateSlot(string itemDataID, string type, int _amount)
+        {
+            if (OnBeforeUpdate != null)
+                OnBeforeUpdate.Invoke(this);
+
+            ItemDataID = itemDataID;
+            ItemType = type;
+            amount = _amount;
+
+            if (OnAfterUpdate != null)
+                OnAfterUpdate.Invoke(this);
+        }
+
+        public bool CanPlaceInSlot(string itemDataID)
+        {
+            if (itemDataID != "")
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

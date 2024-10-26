@@ -1,28 +1,25 @@
-﻿using System.Text.Json;
-
-namespace InventoryDTO.Weapons;
-
-public class SprintWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
+﻿namespace InventoryDTO.Weapons
 {
-
-    public ItemData CreateDefaultValues(string itemType, string element)
+    public class SprintWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
-        SprintWeaponData sprintWeaponData = new SprintWeaponData
+        public ItemData CreateDefaultValues(string itemType, string element)
         {
-            Id = itemType + element,
-            ItemType = itemType,
-            Element = element,
-            Name = "Sprint Weapon",
-            TotalDamage = 20,
-            ChiCost = 50
-        };
+            SprintWeaponData sprintWeaponData = new SprintWeaponData
+            {
+                Id = itemType + element,
+                ItemType = itemType,
+                Element = element,
+                Name = "Sprint Weapon",
+                TotalDamage = 20,
+                ChiCost = 50
+            };
 
-        return sprintWeaponData;
+            return sprintWeaponData;
+        }
 
-    }
-
-    public void Upgrade(int level)
-    {
-        throw new System.NotImplementedException();
+        public void Upgrade(int level)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

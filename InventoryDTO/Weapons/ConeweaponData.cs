@@ -1,20 +1,20 @@
-﻿
-namespace InventoryDTO.Weapons;
-
-public class ConeweaponData : WeaponData, ICreateDefaultValues
+﻿namespace InventoryDTO.Weapons
 {
-    public ItemData CreateDefaultValues(string itemType, string element)
+    public class ConeweaponData : WeaponData, ICreateDefaultValues
     {
-        ConeweaponData coneweaponData = new ConeweaponData
+        public ItemData CreateDefaultValues(string itemType, string element)
         {
-            Id = itemType + element,
-            ItemType = itemType,
-            Element = element,
-            Name = "Cone Weapon",
-            TotalDamage = 15,
-            ChiCost = 30
-        };
+            ConeweaponData coneweaponData = new ConeweaponData
+            {
+                Id = itemType + element,
+                ItemType = itemType,
+                Element = element,
+                Name = "Cone Weapon",
+                TotalDamage = 15,
+                ChiCost = 30
+            };
 
-        return coneweaponData;
+            return coneweaponData;
+        }
     }
 }

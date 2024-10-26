@@ -1,25 +1,25 @@
-﻿
-namespace InventoryDTO.Weapons;
-
-public class GroundWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
+﻿namespace InventoryDTO.Weapons
 {
-    public ItemData CreateDefaultValues(string itemType, string element)
+    public class GroundWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
-        GroundWeaponData groundWeaponData = new GroundWeaponData
+        public ItemData CreateDefaultValues(string itemType, string element)
         {
-            Id = itemType + element,
-            ItemType = itemType,
-            Element = element,
-            Name = "Ground Weapon",
-            TotalDamage = 10,
-            ChiCost = 20
-        };
+            GroundWeaponData groundWeaponData = new GroundWeaponData
+            {
+                Id = itemType + element,
+                ItemType = itemType,
+                Element = element,
+                Name = "Ground Weapon",
+                TotalDamage = 10,
+                ChiCost = 20
+            };
 
-        return groundWeaponData;
-    }
+            return groundWeaponData;
+        }
 
-    public void Upgrade(int level)
-    {
-        throw new System.NotImplementedException();
+        public void Upgrade(int level)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
