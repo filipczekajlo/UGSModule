@@ -36,16 +36,28 @@ public class LevelingSystem
     public int Updatelevel(LevelData LevelData)
     {
         int newLevel = CalculateLevelFromTotalXP(LevelData.TotalXP);
+    
+        // Cap the level at MaxLevel
         if (newLevel > MaxLevel)
         {
             newLevel = MaxLevel;
             LevelData.TotalXP = GetTotalXPForLevel(MaxLevel);
         }
 
-        if (newLevel > LevelData.Level)
+        // Update the level if it has changed
+        if (newLevel != LevelData.Level)
         {
+            int oldLevel = LevelData.Level;
             LevelData.Level = newLevel;
-            Console.WriteLine($"Congratulations! You've reached Level {LevelData.Level}.");
+
+            if (newLevel > oldLevel)
+            {
+                Console.WriteLine($"Congratulations! You've reached Level {LevelData.Level}.");
+            }
+            else
+            {
+                Console.WriteLine($"Your level has decreased to Level {LevelData.Level}.");
+            }
         }
 
         double totalXPForCurrentLevel = GetTotalXPForLevel(LevelData.Level);
@@ -56,7 +68,7 @@ public class LevelingSystem
 
         // Calculate XPToNextLevel to reflect the remaining XP needed to level up
         LevelData.XPToNextLevel = totalXPForNextLevel - LevelData.TotalXP;
-        
+
         return LevelData.Level;
     }
 
@@ -84,9 +96,9 @@ public class LevelingSystem
     public GrantExperienceResult GrantExperience(LevelData LevelData, double xpToGain)
     {
         // Add XP, but do not exceed the XP required for the maximum level
-        LevelData.TotalXP = Math.Min(LevelData.TotalXP + xpToGain, GetTotalXPForLevel(MaxLevel));
-    
-        var currentLevel = Updatelevel(LevelData);
+        LevelData.TotalXP = Math.Max(0, Math.Min(LevelData.TotalXP + xpToGain, GetTotalXPForLevel(MaxLevel)));
+        
+        var currentLevel = Updatelevel(LevelData);  
         
         return new GrantExperienceResult(xpToGain, LevelData.TotalXP, currentLevel);
     }
