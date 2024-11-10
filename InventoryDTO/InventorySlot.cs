@@ -50,6 +50,14 @@ namespace InventoryDTO
                 OnAfterUpdate.Invoke(this);
         }
 
+        public void Swap(InventorySlot itemToSwap)
+        {
+            var temp = new InventorySlot(itemToSwap.ItemDataID, itemToSwap.ItemType, itemToSwap.amount);
+            itemToSwap.UpdateSlot(ItemDataID, ItemType, amount);
+            UpdateSlot(temp.ItemDataID, temp.ItemType, temp.amount);
+        }
+       
+
         public bool CanPlaceInSlot(string itemDataID)
         {
             if (itemDataID != "")
