@@ -4,6 +4,9 @@ namespace InventoryDTO
 {
     public static class StringConsts
     {
+        // Player
+        public const string PlayerCloudData = "PlayerCloudData";
+        
         // Element
         public const string AirElement = "Air";
         public const string EarthElement = "Earth";

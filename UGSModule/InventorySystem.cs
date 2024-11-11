@@ -24,10 +24,10 @@ public class InventorySystem
         return resetRequests.ResetPlayer(ctx, apiClient).Result;
     }
     
-    [CloudCodeFunction(nameof(RequestSetPlayerData))]
-    public async Task<string> RequestSetPlayerData(IExecutionContext ctx, IGameApiClient apiClient, string element)
+    [CloudCodeFunction(nameof(RequestSavePlayerData))]
+    public async Task<string> RequestSavePlayerData(IExecutionContext ctx, IGameApiClient apiClient, string element)
     {
-        var playerJson = await GetFromCloudSave(ctx, apiClient, "PlayerCloudData");
+        var playerJson = await GetFromCloudSave(ctx, apiClient, StringConsts.PlayerCloudData);
         if (playerJson != null)
         {
             var deserializedCloudData = JsonConvert.DeserializeObject<PlayerCloudData>(playerJson);
@@ -36,13 +36,23 @@ public class InventorySystem
 
             var serializedCloudData = JsonConvert.SerializeObject(deserializedCloudData);
 
-            SaveToCloudSave(ctx, apiClient, "PlayerCloudData", serializedCloudData);
+            SaveToCloudSave(ctx, apiClient, StringConsts.PlayerCloudData, serializedCloudData);
 
             return serializedCloudData;
         }
 
         return null;
     }
+    
+    [CloudCodeFunction(nameof(RequestSaveAgentData))]
+    public async Task<string> RequestSaveAgentData(IExecutionContext ctx, IGameApiClient apiClient, string element, string data)
+    {
+        await SaveToCloudSave(ctx, apiClient, element, data);
+        
+        return "Saved to CloudSave!!!";
+    }
+    
+    
     
     [CloudCodeFunction(nameof(RequestAgent))]
     public async Task<string> RequestAgent(IExecutionContext ctx, IGameApiClient apiClient, string element)
@@ -85,38 +95,6 @@ public class InventorySystem
         
         return inventories;
     }
-
-  
-    // [CloudCodeFunction(nameof(RequestItemData))]
-    // public async Task<string> RequestItemData(IExecutionContext ctx, IGameApiClient apiClient, string itemID, string element)
-    // {
-    //     // var settings = new JsonSerializerSettings();
-    //     // settings.Converters.Add(new ItemDataJsonConverter());
-    //         
-    //     string item = await GetFromCloudSave(ctx, apiClient, itemID);
-    //     if (item != null)
-    //     {
-    //         return item;
-    //     
-    //         // Deserialize using the custom converter
-    //         // return JsonConvert.DeserializeObject<ItemData>(item, settings);
-    //     }
-    //     
-    //     
-    //     var itemFactory = new ItemFactory();
-    //     var newItem = itemFactory.CreateDefaultItem(itemID, element);
-    //
-    //     if (newItem != null)
-    //     {
-    //         var serializedNewItem = JsonConvert.SerializeObject(newItem);
-    //         await SaveToCloudSave(ctx, apiClient, itemID, serializedNewItem);
-    //         return serializedNewItem;
-    //     }
-    //
-    //     return null;
-    //     // return newItem;
-    // }
-
 
     
     
