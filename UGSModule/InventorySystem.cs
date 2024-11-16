@@ -194,8 +194,8 @@ public class InventorySystem
         {
             var deserializedItem = JsonConvert.DeserializeObject<ItemData>(item);
             
-            
-            deserializedItem.TotalDamage += level;
+            return "COMMENTED OUT CODE!";
+            // deserializedItem.TotalDamage += level;
             
             var serializedItem = JsonConvert.SerializeObject(deserializedItem);
             await SaveToCloudSave(ctx, apiClient, itemID, serializedItem);

@@ -7,8 +7,8 @@ namespace InventoryDTO
         public ItemData()
         {
             Id = "";
-            TotalDamage = 0;
-            ChiCost = 0;
+            // TotalDamage = 0;
+            // ChiCost = 0;
             Name = "";
             ItemType = "";
             Element = "";
@@ -23,7 +23,7 @@ namespace InventoryDTO
 
         public string Element { get; set; }
         public string Name { get; set; }
-        public int TotalDamage { get; set; }
-        public int ChiCost { get; set; }
+        // public int TotalDamage { get; set; }
+        // public int ChiCost { get; set; }
     }
 }

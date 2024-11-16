@@ -32,7 +32,7 @@ public partial class Form1 : Form
 
         foreach (var item in items)
         {
-            values.Add(new ObservablePoint(item.ChiCost, item.TotalDamage));
+            // values.Add(new ObservablePoint(item.ChiCost, item.TotalDamage));
         }
 
         // Create the series for the chart
