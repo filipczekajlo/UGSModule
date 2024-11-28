@@ -22,9 +22,9 @@ public partial class Form1 : Form
         // Create a list of ItemData objects
         List<ItemData> items = new List<ItemData>
         {
-            new DamageOverTimeData().CreateDefaultValues("Fire", "Flame"),
-            new DamageOverTimeData().CreateDefaultValues("Ice", "Frost"),
-            new DamageOverTimeData().CreateDefaultValues("Poison", "Toxin")
+            new FieldWeaponData().CreateDefaultValues("Fire", "Flame"),
+            new FieldWeaponData().CreateDefaultValues("Ice", "Frost"),
+            new FieldWeaponData().CreateDefaultValues("Poison", "Toxin")
         };
 
         // Prepare data for the chart

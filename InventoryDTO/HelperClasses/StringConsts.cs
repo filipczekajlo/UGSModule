@@ -22,6 +22,16 @@ namespace InventoryDTO
         public const string SmallBullet = "SmallBulletWeapon";
         public const string Sprint = "SprintWeapon";
         public const string Wall = "WallWeapon";
+        
+        // Weapon Properties
+        public const string CooldownTime = "CooldownTime";
+        public const string ChiCost = "ChiCost";
+        public const string Distance = "Distance";
+        public const string TotalDamage = "TotalDamage";
+        public const string TotalHealAmount = "TotalHealAmount";
+        public const string DisableMovementDuration = "DisableMovementDuration";
+        public const string Duration = "Duration";
+        
 
         public static List<ItemDataHolder> GetAllAttackItems()
         {

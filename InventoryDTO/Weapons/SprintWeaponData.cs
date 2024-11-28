@@ -10,8 +10,12 @@
                 ItemType = itemType,
                 Element = element,
                 Name = "Sprint Weapon",
-                TotalDamage = 20,
-                ChiCost = 50
+                
+                TotalDamage = new ItemFloatProperty(StringConsts.TotalDamage, 0),
+                ChiCost = new ItemFloatProperty(StringConsts.ChiCost, 20),
+                CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 5, 4f, 0.1f, 1),
+                DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 0f),
+
             };
 
             return sprintWeaponData;

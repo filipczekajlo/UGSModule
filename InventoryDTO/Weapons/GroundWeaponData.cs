@@ -2,6 +2,8 @@
 {
     public class GroundWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
     {
+        public ItemFloatProperty Radius { get; set; } = new ItemFloatProperty(StringConsts.Distance, 4, 8, 0.5f, 2);
+
         public ItemData CreateDefaultValues(string itemType, string element)
         {
             GroundWeaponData groundWeaponData = new GroundWeaponData
@@ -10,8 +12,12 @@
                 ItemType = itemType,
                 Element = element,
                 Name = "Ground Weapon",
-                TotalDamage = 10,
-                ChiCost = 20
+                
+                TotalDamage = new ItemFloatProperty(StringConsts.TotalDamage, 22, 180, 10, 1),
+                ChiCost = new ItemFloatProperty(StringConsts.ChiCost, 18),
+                CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 4, 3f, 0.2f, 4),
+                DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 4f),
+
             };
 
             return groundWeaponData;

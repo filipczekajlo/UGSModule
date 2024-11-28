@@ -2,6 +2,6 @@
 {
     public interface IUpgradeable
     {
-        public void Upgrade(int level);
+        public void Upgrade(int level = 0);
     }
 }

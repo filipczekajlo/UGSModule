@@ -26,6 +26,7 @@ namespace InventoryDTO
         public int Level { get; set; }
 
         public int ExperiencePoints { get; set; }
+        public int Coins { get; set; }
 
         [JsonIgnore] public Action<string> AgentSelected = delegate { };
 

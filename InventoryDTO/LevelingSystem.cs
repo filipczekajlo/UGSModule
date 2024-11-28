@@ -18,31 +18,29 @@ namespace InventoryDTO
             }
         }
 
-        public double XPForFirstLevel { get; } = 100; // Adjust as needed
-        public double Exponent { get; } = 1f; // Adjust as needed
-        public int MaxLevel { get; } = 100; // Set a level cap if desired
 
-        public double GetTotalXPForLevel(int level)
+        public double GetTotalXPForLevel(LevelData levelData, int level)
         {
             if (level <= 0) return 0;
 
-            return XPForFirstLevel * Math.Pow(level, Exponent);
+            return levelData.XPForFirstLevel * Math.Pow(level, levelData.Exponent);
         }
 
         public double GetXPForNextLevel(int currentLevel)
         {
-            return GetTotalXPForLevel(currentLevel + 1) - GetTotalXPForLevel(currentLevel);
+            // return GetTotalXPForLevel(currentLevel + 1) - GetTotalXPForLevel(currentLevel);
+            return -1;
         }
 
         public int Updatelevel(LevelData LevelData)
         {
-            int newLevel = CalculateLevelFromTotalXP(LevelData.TotalXP);
+            int newLevel = CalculateLevelFromTotalXP(LevelData, LevelData.TotalXP);
 
             // Cap the level at MaxLevel
-            if (newLevel > MaxLevel)
+            if (newLevel > LevelData.MaxLevel)
             {
-                newLevel = MaxLevel;
-                LevelData.TotalXP = GetTotalXPForLevel(MaxLevel);
+                newLevel = LevelData.MaxLevel;
+                LevelData.TotalXP = GetTotalXPForLevel(LevelData, LevelData.MaxLevel);
             }
 
             // Update the level if it has changed
@@ -61,8 +59,8 @@ namespace InventoryDTO
                 }
             }
 
-            double totalXPForCurrentLevel = GetTotalXPForLevel(LevelData.Level);
-            double totalXPForNextLevel = GetTotalXPForLevel(LevelData.Level + 1);
+            double totalXPForCurrentLevel = GetTotalXPForLevel(LevelData, LevelData.Level);
+            double totalXPForNextLevel = GetTotalXPForLevel(LevelData, LevelData.Level + 1);
 
             // Ensure CurrentLevelXP is not negative
             LevelData.CurrentLevelXP = Math.Max(0, LevelData.TotalXP - totalXPForCurrentLevel);
@@ -73,7 +71,7 @@ namespace InventoryDTO
             return LevelData.Level;
         }
 
-        public int CalculateLevelFromTotalXP(double totalXP)
+        public int CalculateLevelFromTotalXP(LevelData levelData, double totalXP)
         {
             // Ensure totalXP is not negative
             if (totalXP < 0)
@@ -82,12 +80,12 @@ namespace InventoryDTO
             }
 
             // Calculate the level based on totalXP without any additional offset
-            double level = Math.Pow(totalXP / XPForFirstLevel, 1 / Exponent);
+            double level = Math.Pow(totalXP / levelData.XPForFirstLevel, 1 / levelData.Exponent);
 
             // Cap the level at MaxLevel
-            if (level >= MaxLevel)
+            if (level >= levelData.MaxLevel)
             {
-                return MaxLevel;
+                return levelData.MaxLevel;
             }
 
             return (int)Math.Floor(level);
@@ -97,7 +95,7 @@ namespace InventoryDTO
         public GrantExperienceResult GrantExperience(LevelData LevelData, double xpToGain)
         {
             // Add XP, but do not exceed the XP required for the maximum level
-            LevelData.TotalXP = Math.Max(0, Math.Min(LevelData.TotalXP + xpToGain, GetTotalXPForLevel(MaxLevel)));
+            LevelData.TotalXP = Math.Max(0, Math.Min(LevelData.TotalXP + xpToGain, GetTotalXPForLevel(LevelData, LevelData.MaxLevel)));
 
             var currentLevel = Updatelevel(LevelData);
 

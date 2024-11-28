@@ -11,14 +11,14 @@ namespace InventoryDTO
             // here
         private static readonly Dictionary<string, Type> TypeMapping = new Dictionary<string, Type>
         {
-            {StringConsts.BigBullet, typeof(ThrowableWeaponData)},
+            {StringConsts.BigBullet, typeof(BigBulletWeaponData)},
             {StringConsts.Cone, typeof(ConeweaponData)},
-            {StringConsts.Field, typeof(DamageOverTimeData)},
+            {StringConsts.Field, typeof(FieldWeaponData)},
             {StringConsts.Ground, typeof(GroundWeaponData)},
             {StringConsts.Heal, typeof(HealWeaponData)},
-            {StringConsts.SmallBullet, typeof(HitscanWeaponData)},
+            {StringConsts.SmallBullet, typeof(SmallBulletWeaponData)},
             {StringConsts.Sprint, typeof(SprintWeaponData)},
-            {StringConsts.Wall, typeof(DamageOverTimeData)},
+            {StringConsts.Wall, typeof(WallWeaponData)},
             
             
             // {"ConeWeapon", typeof(ConeweaponData)},
