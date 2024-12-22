@@ -17,7 +17,19 @@ namespace InventoryDTO
         public WeaponData()
         {
         }
-        public virtual void Upgrade(int level = 0)
+
+        public void Upgrade()
+        {
+            Level++;
+            SetLevel(Level);
+        }
+
+        public void Downgrade()
+        {
+            Level--;
+            SetLevel(Level);
+        }
+        public virtual void SetLevel(int level)
         {
             if(level == 0)
             {

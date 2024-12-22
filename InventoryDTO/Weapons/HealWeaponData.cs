@@ -24,13 +24,13 @@ namespace InventoryDTO.Weapons
                 {
                     TotalHealingAmount,
                     Duration
-                }
+                } 
             };
 
             return healWeaponData;
         }
 
-        public void Upgrade(int level)
+        public void SetLevel(int level)
         {
             throw new System.NotImplementedException();
         }

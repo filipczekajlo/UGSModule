@@ -195,8 +195,8 @@ public class InventorySystem
         return $"Could not add xp to agent with agentKey '{element}' Agent not found";
     }
 
-    [CloudCodeFunction(nameof(RequestUpgradeWeapon))]
-    public async Task<string> RequestUpgradeWeapon(IExecutionContext ctx, IGameApiClient apiClient, string itemID)
+    [CloudCodeFunction(nameof(RequestChangeLevel))]
+    public async Task<string> RequestChangeLevel(IExecutionContext ctx, IGameApiClient apiClient, string itemID, bool upgrade)
     {
         var itemData = await GetSingleJsonStringFromCloudSave(ctx, apiClient, itemID);
         
@@ -204,8 +204,11 @@ public class InventorySystem
         {
             var deserializedItemData = JsonConvert.DeserializeObject<WeaponData>(itemData);
             
-            deserializedItemData?.Upgrade();
-
+            if(upgrade)
+                deserializedItemData?.Upgrade();
+            else
+                deserializedItemData?.Downgrade(); 
+            
             var serializedItem = JsonConvert.SerializeObject(deserializedItemData);
             await SaveToCloudSave(ctx, apiClient, itemID, serializedItem);
             return serializedItem;
