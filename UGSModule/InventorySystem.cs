@@ -103,26 +103,31 @@ public class InventorySystem
     {
         var allAttackItems = StringConsts.GetAllAttackItems();
 
-        var AllAttackItemIDs = new List<string>();
+        // var AllAttackItemIDs = new List<string>();
         
-        foreach (var item in allAttackItems)
-        {
-            string retrievedItem = await GetSingleJsonStringFromCloudSave(ctx, apiClient, item.ID);
         
-            if (retrievedItem != null)
-            {
-                AllAttackItemIDs.Add(retrievedItem);
-            }
-            
-            else
-            {
-                var newItem = await RequestCreateNewItemData(ctx, apiClient, item.Name, item.Element);
-                AllAttackItemIDs.Add(newItem);
-                
-            }
-        }
+        List<string> foundItems = await GetJsonStringsFromCloudSave(ctx, apiClient, allAttackItems.Select(x => x.ID).ToList());
 
-        return AllAttackItemIDs;
+        return foundItems;
+        
+        // foreach (var item in allAttackItems)
+        // {
+        //     string retrievedItem = await GetSingleJsonStringFromCloudSave(ctx, apiClient, item.ID);
+        //
+        //     if (retrievedItem != null)
+        //     {
+        //         AllAttackItemIDs.Add(retrievedItem);
+        //     }
+        //     
+        //     else
+        //     {
+        //         var newItem = await RequestCreateNewItemData(ctx, apiClient, item.Name, item.Element);
+        //         AllAttackItemIDs.Add(newItem);
+        //         
+        //     }
+        // }
+        //
+        // return AllAttackItemIDs;
     }
     
     [CloudCodeFunction(nameof(RequestCreateNewItemData))]
@@ -147,7 +152,8 @@ public class InventorySystem
     private async Task<string?> GetSingleJsonStringFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string keyName)
     {
         var result = await apiClient.CloudSaveData.GetItemsAsync(
-            ctx, ctx.AccessToken,
+            ctx,
+            ctx.AccessToken,
             ctx.ProjectId,
             ctx.PlayerId,
             new List<string> { keyName }
@@ -156,6 +162,20 @@ public class InventorySystem
         if (result.Data.Results.Count == 0) return null;
         return result.Data.Results.First().Value.ToString();
     }
+
+    private async Task<List<string?>> GetJsonStringsFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, List<string> keyNames)
+    {
+        var result = await apiClient.CloudSaveData.GetItemsAsync(
+            ctx,
+            ctx.AccessToken, 
+            ctx.ProjectId, 
+            ctx.PlayerId, 
+            keyNames
+            );
+        
+        return result.Data.Results.Select(x => x.Value.ToString()).ToList();
+    }
+
 
     public async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
     {
