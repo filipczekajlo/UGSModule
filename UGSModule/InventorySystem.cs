@@ -101,33 +101,44 @@ public class InventorySystem
     [CloudCodeFunction(nameof(RequestAllItemData))]
     public async Task<List<string>> RequestAllItemData(IExecutionContext ctx, IGameApiClient apiClient)
     {
+        // Get the list of all items we want
         var allAttackItems = StringConsts.GetAllAttackItems();
 
-        // var AllAttackItemIDs = new List<string>();
-        
-        
-        List<string> foundItems = await GetJsonStringsFromCloudSave(ctx, apiClient, allAttackItems.Select(x => x.ID).ToList());
+        // Extract the keys to look up in Cloud Save
+        var itemKeys = allAttackItems.Select(x => x.ID).ToList();
 
-        return foundItems;
-        
-        // foreach (var item in allAttackItems)
-        // {
-        //     string retrievedItem = await GetSingleJsonStringFromCloudSave(ctx, apiClient, item.ID);
-        //
-        //     if (retrievedItem != null)
-        //     {
-        //         AllAttackItemIDs.Add(retrievedItem);
-        //     }
-        //     
-        //     else
-        //     {
-        //         var newItem = await RequestCreateNewItemData(ctx, apiClient, item.Name, item.Element);
-        //         AllAttackItemIDs.Add(newItem);
-        //         
-        //     }
-        // }
-        //
-        // return AllAttackItemIDs;
+        // Grab what already exists in Cloud Save
+        Dictionary<string, string?> existingItemsDict = await GetJsonStringsFromCloudSave(ctx, apiClient, itemKeys);
+
+        // This list will store the final JSONs (both existing and newly created)
+        var finalItems = new List<string>();
+
+        // For each *desired* item, see if it exists in Cloud Save. If not, create it.
+        foreach (var itemHolder in allAttackItems)
+        {
+            // e.g. itemHolder.ID = "BigBulletAir"
+            if (existingItemsDict.TryGetValue(itemHolder.ID, out var existingJson) && !string.IsNullOrEmpty(existingJson))
+            {
+                // It's already in Cloud Save; just add it to our final list
+                finalItems.Add(existingJson);
+            }
+            else
+            {
+                // Missing from Cloud Save, so create a new item and save it
+                var newJson = await RequestCreateNewItemData(
+                    ctx,
+                    apiClient,
+                    itemHolder.Name,     // or itemHolder.ItemName
+                    itemHolder.Element   // or itemHolder.ItemElement
+                );
+            
+                // Add the newly created item JSON to the final list
+                finalItems.Add(newJson);
+            }
+        }
+
+        // Return a complete list, guaranteed to have *all* items (existing or newly created)
+        return finalItems;
     }
     
     [CloudCodeFunction(nameof(RequestCreateNewItemData))]
@@ -163,20 +174,35 @@ public class InventorySystem
         return result.Data.Results.First().Value.ToString();
     }
 
-    private async Task<List<string?>> GetJsonStringsFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, List<string> keyNames)
+    // private async Task<List<string?>> GetJsonStringsFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, List<string> keyNames)
+    // {
+    //     var result = await apiClient.CloudSaveData.GetItemsAsync(
+    //         ctx,
+    //         ctx.AccessToken, 
+    //         ctx.ProjectId, 
+    //         ctx.PlayerId, 
+    //         keyNames
+    //         );
+    //     
+    //     return result.Data.Results.Select(x => x.Value.ToString()).ToList();
+    // }
+
+    private async Task<Dictionary<string, string?>> GetJsonStringsFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, List<string> keyNames)
     {
-        var result = await apiClient.CloudSaveData.GetItemsAsync(
-            ctx,
-            ctx.AccessToken, 
-            ctx.ProjectId, 
-            ctx.PlayerId, 
-            keyNames
-            );
-        
-        return result.Data.Results.Select(x => x.Value.ToString()).ToList();
+        var result = await apiClient.CloudSaveData.GetItemsAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, keyNames);
+
+        // Build a dictionary of what was actually found:
+        var dict = new Dictionary<string, string?>();
+        foreach (var item in result.Data.Results)
+        {
+            // item.Key is the string key
+            // item.Value.ToString() is the JSON we stored
+            dict[item.Key] = item.Value?.ToString();
+        }
+
+        return dict;
     }
-
-
+    
     public async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
     {
         var result = await apiClient.CloudSaveData
