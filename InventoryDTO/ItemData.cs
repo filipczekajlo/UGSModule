@@ -21,6 +21,7 @@ namespace InventoryDTO
         public string Element { get; set; }
         public string Name { get; set; }
         
+        public List<ItemFloatProperty> GeneralProperties { get; set; } = new List<ItemFloatProperty>();
         public List<ItemFloatProperty> SpecificProperties { get; set; } = new List<ItemFloatProperty>();
 
 

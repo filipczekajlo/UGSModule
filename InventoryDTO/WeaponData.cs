@@ -37,15 +37,43 @@ namespace InventoryDTO
             }
             
             Level = level;
-            foreach (var prop in SpecificProperties)
+            
+            foreach (var property in GeneralProperties)
             {
-                if (prop.UpgradeInterval > 0)
-                {
-                    int totalUpgrades = Level / prop.UpgradeInterval;
-                    prop.CurrentValue = Math.Min(prop.InitialValue + totalUpgrades * prop.UpgradeAmount, prop.BestValue);
-                }
+                
+                 property.UpdateLevel(Level);
+                // property.NextValue = property.SetValuesForLevel(Level + 1, MaxLevel);
+
+                // if (prop.UpgradeInterval > 0)
+                // {
+                //     int totalUpgrades = Level / prop.UpgradeInterval;
+                //     prop.CurrentValue = Math.Min(prop.InitialValue + totalUpgrades * prop.UpgradeAmount, prop.BestValue);
+                // }
+            }
+        
+            foreach (var property in SpecificProperties)
+            {
+                 property.UpdateLevel(Level);
+                // property.NextValue = property.SetValuesForLevel(Level + 1, MaxLevel);
+                // if (property.UpgradeInterval > 0)
+                // {
+                //     int totalUpgrades = Level / property.UpgradeInterval;
+                //     property.CurrentValue = Math.Min(property.InitialValue + totalUpgrades * property.UpgradeAmount, property.BestValue);
+                // }
             }
         }
+        
+        public  List<ItemFloatProperty> CreateGeneralProperties()
+        {
+            return new List<ItemFloatProperty>()
+            {
+                TotalDamage,
+                ChiCost,
+                CooldownTime,
+                DisableMovementDuration
+            };
+        }
+        
         
 
     }

@@ -12,7 +12,7 @@ namespace InventoryDTO
         private static readonly Dictionary<string, Type> TypeMapping = new Dictionary<string, Type>
         {
             {StringConsts.BigBullet, typeof(BigBulletWeaponData)},
-            {StringConsts.Cone, typeof(ConeweaponData)},
+            {StringConsts.Cone, typeof(ConeWeaponData)},
             {StringConsts.Field, typeof(FieldWeaponData)},
             {StringConsts.Ground, typeof(GroundWeaponData)},
             {StringConsts.Heal, typeof(HealWeaponData)},

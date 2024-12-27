@@ -6,24 +6,43 @@
 
         public ItemFloatProperty Distance { get; set; } = new ItemFloatProperty(StringConsts.Distance, 8, 16, 0.5f, 2);
 
-        public ItemData CreateDefaultValues(string itemType, string element)
+        public WallWeaponData()
         {
-            WallWeaponData fieldWeaponData = new WallWeaponData
-            {
-                Id = itemType + element,
-                ItemType = itemType,
-                Element = element,
-                Name = "Wall Weapon",
+            
+        }       
+        public WallWeaponData(string itemType, string element)
+        {
+            Id = itemType + element;
+            ItemType = itemType;
+            Element = element;
+            Name = "Wall Weapon";
                 
-                TotalDamage = new ItemFloatProperty(StringConsts.TotalDamage, 16, 160, 8, 1),
-                ChiCost = new ItemFloatProperty(StringConsts.ChiCost, 25),
-                CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 4, 3f, 0.2f, 4),
-                DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 1f),
+            TotalDamage = new ItemFloatProperty(StringConsts.TotalDamage, 16, 160, 8, 1);
+            ChiCost = new ItemFloatProperty(StringConsts.ChiCost, 25);
+            CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 4f);
+            DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 1f);
 
-            };
+            GeneralProperties = CreateGeneralProperties();
 
-            return fieldWeaponData;
         }
+        // public ItemData CreateDefaultValues(string itemType, string element)
+        // {
+        //     WallWeaponData fieldWeaponData = new WallWeaponData
+        //     {
+        //         Id = itemType + element,
+        //         ItemType = itemType,
+        //         Element = element,
+        //         Name = "Wall Weapon",
+        //         
+        //         TotalDamage = new ItemFloatProperty(StringConsts.TotalDamage, 16, 160, 8, 1),
+        //         ChiCost = new ItemFloatProperty(StringConsts.ChiCost, 25),
+        //         CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 4, 3f, 0.2f, 4),
+        //         DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 1f),
+        //
+        //     };
+        //
+        //     return fieldWeaponData;
+        // }
 
         public void SetLevel(int level)
         {

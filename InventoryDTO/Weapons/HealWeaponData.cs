@@ -6,30 +6,30 @@ namespace InventoryDTO.Weapons
     {
         public ItemFloatProperty TotalHealingAmount { get; set; } = new ItemFloatProperty(StringConsts.TotalHealAmount, 18, 60, 4, 1);
         public ItemFloatProperty Duration { get; set; } = new ItemFloatProperty(StringConsts.Duration, 8, 20, 1, 1);
-        public ItemData CreateDefaultValues(string itemType, string element)
+        
+        public HealWeaponData()
         {
-            HealWeaponData healWeaponData = new HealWeaponData
-            {
-                Id = itemType + element,
-                ItemType = itemType,
-                Element = element,
-                Name = "Heal Weapon",
-                
-                TotalDamage = new ItemFloatProperty(StringConsts.TotalDamage, -1),
-                ChiCost = new ItemFloatProperty(StringConsts.ChiCost, 25),
-                CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 4, 5f, 0.1f, 1),
-                DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 0.5f),
-                
-                SpecificProperties = new List<ItemFloatProperty>()
-                {
-                    TotalHealingAmount,
-                    Duration
-                } 
-            };
-
-            return healWeaponData;
         }
+        public HealWeaponData(string itemType, string element)
+        {
+            Id = itemType + element;
+            ItemType = itemType;
+            Element = element;
+            Name = "Heal Weapon";
+                
+            TotalDamage = new ItemFloatProperty(StringConsts.TotalDamage, 0, 0, 0, 0);
+            ChiCost = new ItemFloatProperty(StringConsts.ChiCost, 10);
+            CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 0.5f);
+            DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 0.5f);
 
+            GeneralProperties = CreateGeneralProperties();
+
+            SpecificProperties = new List<ItemFloatProperty>()
+            {
+                TotalHealingAmount,
+                Duration
+            };
+        }
         public void SetLevel(int level)
         {
             throw new System.NotImplementedException();
