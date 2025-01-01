@@ -101,6 +101,32 @@ public class InventorySystem
     [CloudCodeFunction(nameof(RequestAllItemData))]
     public async Task<List<string>> RequestAllItemData(IExecutionContext ctx, IGameApiClient apiClient)
     {
+        
+        var allAttackItems2 = StringConsts.GetAllAttackItems();
+
+        var AllAttackItemIDs = new List<string>();
+        
+        foreach (var item in allAttackItems2)
+        {
+            string retrievedItem = await GetSingleJsonStringFromCloudSave(ctx, apiClient, item.ID);
+        
+            if (retrievedItem != null)
+            {
+                AllAttackItemIDs.Add(retrievedItem);
+            }
+            
+            else
+            {
+                var newItem = await RequestCreateNewItemData(ctx, apiClient, item.Name, item.Element);
+                AllAttackItemIDs.Add(newItem);
+                
+            }
+        }
+
+        return AllAttackItemIDs;
+        
+        // ToDo: Below approach does not get all 32 items. Find out why!
+        
         // Get the list of all items we want
         var allAttackItems = StringConsts.GetAllAttackItems();
 
@@ -114,10 +140,10 @@ public class InventorySystem
         var finalItems = new List<string>();
 
         // For each *desired* item, see if it exists in Cloud Save. If not, create it.
-        foreach (var itemHolder in allAttackItems)
+        foreach (var item in allAttackItems)
         {
             // e.g. itemHolder.ID = "BigBulletAir"
-            if (existingItemsDict.TryGetValue(itemHolder.ID, out var existingJson) && !string.IsNullOrEmpty(existingJson))
+            if (existingItemsDict.TryGetValue(item.ID, out var existingJson) && !string.IsNullOrEmpty(existingJson))
             {
                 // It's already in Cloud Save; just add it to our final list
                 finalItems.Add(existingJson);
@@ -128,8 +154,8 @@ public class InventorySystem
                 var newJson = await RequestCreateNewItemData(
                     ctx,
                     apiClient,
-                    itemHolder.Name,     // or itemHolder.ItemName
-                    itemHolder.Element   // or itemHolder.ItemElement
+                    item.Name,
+                    item.Element
                 );
             
                 // Add the newly created item JSON to the final list
@@ -155,11 +181,10 @@ public class InventorySystem
         }
         else
         {
-            return null;
+            return "";
         }
     }
 
-    // TODO: We can probably get multiple items at once with this method. Use this to your advantage! Get all agents and items at once!
     private async Task<string?> GetSingleJsonStringFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string keyName)
     {
         var result = await apiClient.CloudSaveData.GetItemsAsync(
@@ -174,20 +199,8 @@ public class InventorySystem
         return result.Data.Results.First().Value.ToString();
     }
 
-    // private async Task<List<string?>> GetJsonStringsFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, List<string> keyNames)
-    // {
-    //     var result = await apiClient.CloudSaveData.GetItemsAsync(
-    //         ctx,
-    //         ctx.AccessToken, 
-    //         ctx.ProjectId, 
-    //         ctx.PlayerId, 
-    //         keyNames
-    //         );
-    //     
-    //     return result.Data.Results.Select(x => x.Value.ToString()).ToList();
-    // }
-
-    private async Task<Dictionary<string, string?>> GetJsonStringsFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, List<string> keyNames)
+    [CloudCodeFunction(nameof(GetJsonStringsFromCloudSave))]
+    public async Task<Dictionary<string, string>> GetJsonStringsFromCloudSave(IExecutionContext ctx, IGameApiClient apiClient, List<string> keyNames)
     {
         var result = await apiClient.CloudSaveData.GetItemsAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, keyNames);
 
@@ -195,20 +208,25 @@ public class InventorySystem
         var dict = new Dictionary<string, string?>();
         foreach (var item in result.Data.Results)
         {
-            // item.Key is the string key
-            // item.Value.ToString() is the JSON we stored
-            dict[item.Key] = item.Value?.ToString();
+            dict[item.Key] = item.Value.ToString();
         }
 
         return dict;
     }
     
+    
     public async Task<string> SaveToCloudSave(IExecutionContext ctx, IGameApiClient apiClient, string key, string value)
     {
-        var result = await apiClient.CloudSaveData
-            .SetItemAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, new SetItemBody(key, value));
+        var result = await apiClient.CloudSaveData.SetItemAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, new SetItemBody(key, value));
 
-        return result.Data.ToString();
+        if (result.ErrorText == "")
+        {
+            // ToDo: Check error text and throw exception if error
+            // throw new Exception();
+            return result.ErrorText;
+        }
+        
+        return "";
     }
     
 
@@ -242,31 +260,36 @@ public class InventorySystem
     }
 
     [CloudCodeFunction(nameof(RequestChangeLevel))]
-    public async Task<string> RequestChangeLevel(IExecutionContext ctx, IGameApiClient apiClient, string itemID, bool upgrade)
+    public async Task<bool> RequestChangeLevel(IExecutionContext ctx, IGameApiClient apiClient, string itemID, bool upgrade)
     {
         var itemData = await GetSingleJsonStringFromCloudSave(ctx, apiClient, itemID);
+
+        if (string.IsNullOrEmpty(itemData))
+            return false;
         
-        if (itemData != null)
-        {
-            var deserializedItemData = JsonConvert.DeserializeObject<WeaponData>(itemData);
+        var deserializedItemData = JsonConvert.DeserializeObject<WeaponData>(itemData);
+        if( deserializedItemData == null)
+            return false;
+        
+        var originalLevel = deserializedItemData.Level.CurrentValue;
             
-            if(upgrade)
-                deserializedItemData?.Upgrade();
-            else
-                deserializedItemData?.Downgrade(); 
-            
-            var serializedItem = JsonConvert.SerializeObject(deserializedItemData);
-            await SaveToCloudSave(ctx, apiClient, itemID, serializedItem);
-            return serializedItem;
-        }
+        if(upgrade)
+            deserializedItemData.Upgrade();
         else
-        {
-            return "Provided ItemData was not of type WeaponData!";
-        }
+            deserializedItemData.Downgrade(); 
         
-        return null;
+        if (deserializedItemData.Level.CurrentValue == originalLevel)
+            return false;
+            
+        var serializedItem = JsonConvert.SerializeObject(deserializedItemData);
+
+        if (string.IsNullOrEmpty(serializedItem))
+            return false;
+        
+        await SaveToCloudSave(ctx, apiClient, itemID, serializedItem);
+
+        return true;
     }
-   
 
   
 

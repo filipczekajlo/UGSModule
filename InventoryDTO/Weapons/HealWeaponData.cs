@@ -2,7 +2,7 @@
 
 namespace InventoryDTO.Weapons
 {
-    public class HealWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
+    public class HealWeaponData : WeaponData, IUpgradeable
     {
         public ItemFloatProperty TotalHealingAmount { get; set; } = new ItemFloatProperty(StringConsts.TotalHealAmount, 18, 60, 4, 1);
         public ItemFloatProperty Duration { get; set; } = new ItemFloatProperty(StringConsts.Duration, 8, 20, 1, 1);
@@ -22,17 +22,13 @@ namespace InventoryDTO.Weapons
             CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 0.5f);
             DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 0.5f);
 
-            GeneralProperties = CreateGeneralProperties();
+            CreateGeneralProperties();
 
             SpecificProperties = new List<ItemFloatProperty>()
             {
                 TotalHealingAmount,
                 Duration
             };
-        }
-        public void SetLevel(int level)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace InventoryDTO.Weapons
 {
-    public class ConeWeaponData : WeaponData, ICreateDefaultValues
+    public class ConeWeaponData : WeaponData
     {
         public ConeWeaponData()
         {
@@ -21,7 +21,7 @@ namespace InventoryDTO.Weapons
             CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 3);
             DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 0.5f);
 
-            GeneralProperties = CreateGeneralProperties();
+            CreateGeneralProperties();
             
             SpecificProperties = new List<ItemFloatProperty>()
             {

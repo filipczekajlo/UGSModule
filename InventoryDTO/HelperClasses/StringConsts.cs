@@ -27,6 +27,7 @@ namespace InventoryDTO
         public const string CooldownTime = "CooldownTime";
         public const string ChiCost = "ChiCost";
         public const string Distance = "Distance";
+        public const string Level = "Level";
         public const string TotalDamage = "TotalDamage";
         public const string TotalHealAmount = "TotalHealAmount";
         public const string DisableMovementDuration = "DisableMovementDuration";

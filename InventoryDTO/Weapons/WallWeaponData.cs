@@ -1,6 +1,6 @@
 ﻿namespace InventoryDTO.Weapons
 {
-    public class WallWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
+    public class WallWeaponData : WeaponData, IUpgradeable
     {
         public ItemFloatProperty Duration { get; set; } = new ItemFloatProperty(StringConsts.Duration, 4);
 
@@ -22,7 +22,7 @@
             CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 4f);
             DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 1f);
 
-            GeneralProperties = CreateGeneralProperties();
+            CreateGeneralProperties();
 
         }
         // public ItemData CreateDefaultValues(string itemType, string element)
@@ -44,9 +44,6 @@
         //     return fieldWeaponData;
         // }
 
-        public void SetLevel(int level)
-        {
-            throw new System.NotImplementedException();
-        }
+      
     }
 }

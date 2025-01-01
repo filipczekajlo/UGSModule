@@ -32,14 +32,13 @@ public class ItemFactory
         };
     }
     
-    public ItemData CreateDefaultItem(string itemType, string element)
+    public ItemData? CreateDefaultItem(string itemType, string element)
     {
         if (_defaultItemCreators.TryGetValue(itemType, out var creator))
         {
             return creator(itemType, element);
         }
         
-        throw new Exception("Could not create default item! Unknown item name: " + itemType);
         return null;
     }
 }

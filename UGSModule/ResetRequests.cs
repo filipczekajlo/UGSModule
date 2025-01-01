@@ -24,9 +24,7 @@ public class ResetRequests
         List<KeyMetadata> keyMetadatas = allKeys.Data.Results;
         var allKeysList = keyMetadatas.Select(k => k.Key).ToList();
         
-        var items = apiClient.CloudSaveData.GetItemsAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, allKeysList).Result;
-        
-        
+        // var items = apiClient.CloudSaveData.GetItemsAsync(ctx, ctx.AccessToken, ctx.ProjectId, ctx.PlayerId, allKeysList).Result;
             
         string allFoundSavedKeys = "ALL FOUND KEYS. NOW DELETING: \n";
         foreach (var key in allKeysList)

@@ -1,6 +1,6 @@
 ﻿namespace InventoryDTO.Weapons
 {
-    public class GroundWeaponData : WeaponData, ICreateDefaultValues, IUpgradeable
+    public class GroundWeaponData : WeaponData, IUpgradeable
     {
         public ItemFloatProperty Radius { get; set; } = new ItemFloatProperty(StringConsts.Distance, 4, 8, 0.5f, 2);
 
@@ -20,7 +20,7 @@
             CooldownTime = new ItemFloatProperty(StringConsts.CooldownTime, 4);
             DisableMovementDuration = new ItemFloatProperty(StringConsts.DisableMovementDuration, 4f);
 
-            GeneralProperties = CreateGeneralProperties();
+            CreateGeneralProperties();
 
             SpecificProperties.Add(Radius);
         }
@@ -44,9 +44,6 @@
         //     return groundWeaponData;
         // }
 
-        public void SetLevel(int level)
-        {
-            throw new System.NotImplementedException();
-        }
+        
     }
 }

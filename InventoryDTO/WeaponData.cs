@@ -3,16 +3,14 @@ using System.Collections.Generic;
 
 namespace InventoryDTO
 {
-    public class WeaponData : ItemData, IUpgradeable
+    public class WeaponData : ItemData
     {
+        // public LevelData LevelData { get; set; }
+        public ItemIntProperty Level { get; protected set; } = new ItemIntProperty(StringConsts.Level, 1, 50, 1, 1);
         public ItemFloatProperty TotalDamage { get; protected set; } = new ItemFloatProperty(StringConsts.TotalDamage, 0, 100, 1, 10);
         public ItemFloatProperty ChiCost { get; protected set; } = new ItemFloatProperty(StringConsts.ChiCost, 10, 20, 1, 5);
         public ItemFloatProperty CooldownTime { get; protected set; } = new ItemFloatProperty(StringConsts.CooldownTime, 0.5f,5f, 0.1f, 1);
         public ItemFloatProperty DisableMovementDuration { get; protected set; } = new ItemFloatProperty(StringConsts.CooldownTime, 0.5f);
-
-        
-        public int Level { get; set; }
-        public int MaxLevel { get; set; }
         
         public WeaponData()
         {
@@ -20,58 +18,42 @@ namespace InventoryDTO
 
         public void Upgrade()
         {
-            Level++;
-            SetLevel(Level);
+            var newLevel = Level.CurrentValue + 1;
+            SetLevel(newLevel);
         }
 
         public void Downgrade()
         {
-            Level--;
-            SetLevel(Level);
+            var newLevel = Level.CurrentValue - 1;
+            SetLevel(newLevel);
         }
-        public virtual void SetLevel(int level)
+        public virtual void SetLevel(int newLevel)
         {
-            if(level == 0)
-            {
-                level = Level + 1;
-            }
+            Level.UpdateLevel(newLevel);
             
-            Level = level;
-            
-            foreach (var property in GeneralProperties)
+            foreach (var property in GeneralFloatProperties)
             {
-                
-                 property.UpdateLevel(Level);
-                // property.NextValue = property.SetValuesForLevel(Level + 1, MaxLevel);
-
-                // if (prop.UpgradeInterval > 0)
-                // {
-                //     int totalUpgrades = Level / prop.UpgradeInterval;
-                //     prop.CurrentValue = Math.Min(prop.InitialValue + totalUpgrades * prop.UpgradeAmount, prop.BestValue);
-                // }
+                 property.UpdateLevel(newLevel);
             }
         
             foreach (var property in SpecificProperties)
             {
-                 property.UpdateLevel(Level);
-                // property.NextValue = property.SetValuesForLevel(Level + 1, MaxLevel);
-                // if (property.UpgradeInterval > 0)
-                // {
-                //     int totalUpgrades = Level / property.UpgradeInterval;
-                //     property.CurrentValue = Math.Min(property.InitialValue + totalUpgrades * property.UpgradeAmount, property.BestValue);
-                // }
+                 property.UpdateLevel(newLevel);
             }
         }
         
-        public  List<ItemFloatProperty> CreateGeneralProperties()
+        public List<ItemFloatProperty> CreateGeneralProperties()
         {
-            return new List<ItemFloatProperty>()
+            var props =   new List<ItemFloatProperty>()
             {
                 TotalDamage,
                 ChiCost,
                 CooldownTime,
                 DisableMovementDuration
             };
+
+            GeneralFloatProperties.AddRange(props);
+            return props;
         }
         
         
